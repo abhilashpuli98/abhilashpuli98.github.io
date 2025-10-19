@@ -1,272 +1,713 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Abhilash Puli</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-    <link href="css/main.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/favicon-uni.svg" rel="icon" type="image/svg+xml">
-    <link href="css/hover-min.css" rel="stylesheet">
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
-    
-    <script src='js/particles.js' type='text/javascript'></script>
-    <script src='js/particles-init.js' type='text/javascript'></script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetherium | Blogs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
-        @font-face {
-            font-family: 'oneday';
-            src: url("oneday.otf");
+        :root {
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
         }
-        h1, p {
-            font-family: 'oneday', sans-serif;
-        }
+        ::-webkit-scrollbar { display: none; }
+        html { -ms-overflow-style: none; scrollbar-width: none; }
 
-        html {
-            scroll-behavior: smooth;
+        .light {
+            --bg-color: #ffffff;
+            --text-color: #121212;
+            --card-bg: rgba(249, 249, 249, 0.7);
+            --border-color: #e0e0e0;
+            --secondary-text: #666666;
+            --accent-color: #007aff;
+            --accent-glow: rgba(0, 122, 255, 0.2);
+            --aurora-one: #007aff;
+            --aurora-two: #ff4d4d;
+            --aurora-three: #34c759;
         }
-        body {
-            background-color: #f0f2f5;
-            overflow-y: auto;
-        }
-        #particles {
-            height: 100vh;
-            position: relative;
-            background-color: #ffffff;
+        .dark {
+            --bg-color: #000000;
+            --text-color: #f5f5f7;
+            --card-bg: rgba(17, 17, 17, 0.8);
+            --border-color: #2a2a2a;
+            --secondary-text: #999999;
+            --accent-color: #0a84ff;
+            --accent-glow: rgba(10, 132, 255, 0.3);
+            --aurora-one: #0a84ff;
+            --aurora-two: #ff3b30;
+            --aurora-three: #30d158;
         }
         
-        @keyframes rotate-border-color {
-            0%   { border-color: #a9a9a9; color: #a9a9a9; }
-            25%  { border-color: #6c757d; color: #6c757d; }
-            50%  { border-color: #007bff; color: #007bff; }
-            75%  { border-color: #6f42c1; color: #6f42c1; }
-            100% { border-color: #a9a9a9; color: #a9a9a9; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            cursor: none;
+            overflow-x: hidden;
+            transition: background-color 0.4s var(--ease-out-expo);
         }
 
-        .view-articles-btn {
-            margin-top: 30px;
-            padding: 12px 25px;
-            border: 2px solid;
-            background-color: transparent;
-            text-decoration: none;
-            font-family: 'Raleway', sans-serif;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            animation: rotate-border-color 6s linear infinite;
-        }
-        .view-articles-btn:hover {
-            background-color: #333;
-            border-color: #333;
-            color: #fff;
-            text-decoration: none;
-            animation: none;
-        }
-
-        #articles-section {
-            min-height: 100vh;
-            padding: 80px 0;
-            background: #f0f2f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .section-title {
-            font-family: 'oneday', sans-serif;
-            color: #333;
-            font-size: 3em;
-            text-align: center;
-            margin-bottom: 60px;
-            text-transform: uppercase;
-        }
-        .article-card {
-            background: #ffffff;
-            border-radius: 15px;
+        #aurora-background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
             overflow: hidden;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .article-card:not(.coming-soon):hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-        }
-        .card-img-container {
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
-        .card-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-        .article-card:not(.coming-soon):hover .card-img {
-            transform: scale(1.05);
-        }
-        .card-body {
-            padding: 25px;
-        }
-        .card-title {
-            font-family: 'Raleway', sans-serif;
-            font-weight: 700;
-            font-size: 1.4em;
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #333;
-        }
-        .card-excerpt {
-            font-family: 'Raleway', sans-serif;
-            font-size: 1em;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        .card-tags {
-            margin-bottom: 20px;
-        }
-        .card-tag {
-            display: inline-block;
-            background: #e9e9f0;
-            color: #555;
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 0.8em;
-            font-weight: 600;
-            margin-right: 5px;
-            margin-bottom: 5px;
-        }
-        .card-read-more {
-            display: inline-block;
-            font-family: 'Raleway', sans-serif;
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
-            position: relative;
-        }
-        .card-read-more:after {
-            content: '';
+        .aurora-shape {
             position: absolute;
-            width: 0;
-            height: 2px;
-            display: block;
-            margin-top: 2px;
-            right: 0;
-            background: #007bff;
-            transition: width 0.3s ease;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
         }
-        .card-read-more:hover:after {
-            width: 100%;
-            left: 0;
-            background: #0056b3;
+        #aurora-1 {
+            width: 50vw; height: 50vw;
+            background: var(--aurora-one);
+            top: 10%; left: 10%;
+            animation: move-aurora-1 20s infinite alternate ease-in-out;
+        }
+        #aurora-2 {
+            width: 40vw; height: 40vw;
+            background: var(--aurora-two);
+            top: 50%; left: 60%;
+            animation: move-aurora-2 25s infinite alternate ease-in-out;
+        }
+        #aurora-3 {
+             width: 45vw; height: 45vw;
+            background: var(--aurora-three);
+            top: 30%; left: 30%;
+            animation: move-aurora-3 15s infinite alternate ease-in-out;
         }
 
-        .article-card.coming-soon {
-            opacity: 0.65;
+        @keyframes move-aurora-1 {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(100px, 50px) rotate(45deg); }
         }
-        .article-card.coming-soon .card-img {
-            filter: grayscale(100%);
+        @keyframes move-aurora-2 {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(-100px, -50px) rotate(-45deg); }
         }
-        .card-img-container .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
+        @keyframes move-aurora-3 {
+            from { transform: translate(0, 0) rotate(0deg); }
+            to { transform: translate(50px, -100px) rotate(30deg); }
+        }
+
+        .bg-card { background-color: var(--card-bg); backdrop-filter: blur(16px) saturate(180%); }
+        .text-main { color: var(--text-color); }
+        .border-main { border-color: var(--border-color); }
+        .text-secondary { color: var(--secondary-text); }
+        .text-accent { color: var(--accent-color); }
+        .ring-accent { --tw-ring-color: var(--accent-color); }
+        
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg-color);
+            z-index: 10000;
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: #fff;
-            font-family: 'oneday', sans-serif;
-            font-size: 1.5em;
-            letter-spacing: 2px;
+            align-items: center;
+            transition: opacity 0.5s ease-out;
         }
-        .card-status {
-            font-family: 'Raleway', sans-serif;
-            color: #888;
-            font-weight: bold;
-            font-style: italic;
+        #preloader.loaded {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .preloader-text {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            letter-spacing: -0.05em;
+            overflow: hidden;
+        }
+        .preloader-char {
+            display: inline-block;
+            transform: translateY(100%);
+        }
+
+        .cursor-dot, .cursor-outline {
+            pointer-events: none; position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 9999;
+            mix-blend-mode: difference;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: white; }
+        .cursor-outline { width: 40px; height: 40px; border: 2px solid white; transition: transform 0.2s ease-out; }
+        
+        .glass-header {
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(16px) saturate(180%);
+        }
+        .dark .glass-header { background-color: rgba(18, 18, 18, 0.6); }
+        
+        .card-container, .project-card {
+            border: 1px solid var(--border-color);
+            transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s var(--ease-out-expo);
+            will-change: transform;
+        }
+        
+        .g-fade-up { opacity: 0; transform: translateY(30px); }
+        .g-word { display: inline-block; transform: translateY(100%); }
+
+        #horizontal-scroll-section {
+            width: 100%; height: 100vh;
+            display: flex; align-items: center;
+        }
+        #horizontal-scroll-container {
+            width: max-content; display: flex;
+            padding-left: 10vw; padding-right: 10vw;
+            will-change: transform;
+        }
+        .horizontal-card {
+            width: 50vw; max-width: 700px; height: 65vh; margin-right: 5vw;
+        }
+        
+        #typewriter-text::after {
+            content: '_'; animation: blink 0.7s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s var(--ease-out-expo), padding-bottom 0.5s var(--ease-out-expo);
+        }
+        .faq-answer.open {
+            max-height: 200px;
         }
 
     </style>
 </head>
-<body>
-    <div id="particles">
-        <div id="intro">
-            <h1 class="animated bounceInDown">Abhilash Puli</h1>
-            <hr width="20%">
-            <p class="animated zoomIn">Student // Developer</p><br>
-            <div class="social-media-icons">
-                <a href="mailto:sherlockholmes9886@gmail.com" target="_blank" class="hvr-grow"><i aria-hidden="true" class="fa fa-envelope-o fa-2x animated bounceInUp"></i></a>
-                <a href="https://www.linkedin.com/in/abhilash-puli" target="_blank" class="hvr-grow"><i aria-hidden="true" class="fa fa-linkedin fa-2x animated bounceInUp"></i></a>
-                <a href="https://medium.com/@abhilashpuli" target="_blank" aria-label="Medium" class="hvr-grow">
-                    <i class="fa fa-medium fa-2x animated bounceInUp"></i></a>
-                <a href="https://github.com/abhilashpuli98" target="_blank" class="hvr-grow"><i aria-hidden="true" class="fa fa-github fa-2x animated bounceInUp"></i></a>
-                <a href="assets/docs/resume.pdf" target="_blank" class="hvr-grow"><i aria-hidden="true" class="fa fa-file-pdf-o fa-2x animated bounceInUp"></i></a>
-            </div>
-            <a href="#articles-section" class="view-articles-btn animated fadeInUp">View My Articles</a>
-        </div>
+<body class="bg-main text-main">
+    <div id="preloader">
+        <div class="preloader-text"></div>
+    </div>
+    
+    <div id="aurora-background">
+        <div id="aurora-1" class="aurora-shape"></div>
+        <div id="aurora-2" class="aurora-shape"></div>
+        <div id="aurora-3" class="aurora-shape"></div>
     </div>
 
-    <section id="articles-section">
-        <div class="container">
-            <h2 class="section-title">My Articles</h2>
-            <div class="row">
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
-                <div class="col-md-4">
-                    <div class="article-card">
-                        <div class="card-img-container">
-                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Python Code on a screen" class="card-img">
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">The Art of Making the Internet Talk Back : APIs A Deep Dive</h3>
-                            <p class="card-excerpt">
-                                Explore how to interact with web services using Python. A comprehensive guide covering the basics of REST, making requests, and handling data.
-                            </p>
-                            <div class="card-tags">
-                                <span class="card-tag">Python</span>
-                                <span class="card-tag">API</span>
-                                <span class="card-tag">Web Dev</span>
-                            </div>
-                            <a href="Articles/Blog-API/python-rest-api.html" class="card-read-more" target="_blank">Read More &rarr;</a>
+    <header class="sticky top-0 z-50 glass-header border-b border-main/80">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold text-accent tracking-tighter hover-target" data-magnetic>Aetherium</a>
+                <div class="flex items-center space-x-6">
+                    <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                        <a href="#about-section" class="text-main hover:text-accent transition-colors hover-target" data-magnetic>About</a>
+                        <a href="#faq-section" class="text-main hover:text-accent transition-colors hover-target" data-magnetic>FAQs</a>
+                        <a href="#contact-section" class="text-main hover:text-accent transition-colors hover-target" data-magnetic>Contact</a>
+                    </nav>
+                     <div class="relative">
+                        <input id="search-input" type="search" placeholder="Search..." class="bg-transparent border border-main rounded-full py-2 pl-10 pr-4 w-40 md:w-56 focus:outline-none focus:ring-2 ring-accent transition-all duration-300 text-sm hover-target">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                            <i data-feather="search" class="w-4 h-4 text-secondary"></i>
                         </div>
                     </div>
+                    <button id="theme-switcher" class="relative w-6 h-6 focus:outline-none hover-target" data-magnetic>
+                        <i data-feather="sun" class="absolute inset-0 text-main transition-transform duration-500 ease-out"></i>
+                        <i data-feather="moon" class="absolute inset-0 text-main transition-transform duration-500 ease-out"></i>
+                    </button>
                 </div>
-
-                <div class="col-md-4">
-                    <div class="article-card coming-soon">
-                        <div class="card-img-container">
-                            <div class="overlay">Coming Soon</div>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-status">Coming Soon</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="article-card coming-soon">
-                        <div class="card-img-container">
-                            <div class="overlay">Coming Soon</div>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-status">Coming Soon</p>
-                        </div>
-                    </div>
-                </div>
-                    </div>
-                </div>
-
             </div>
         </div>
-    </section>
+    </header>
+
+    <main class="relative z-10">
+        <section id="hero" class="text-center h-screen flex flex-col justify-center items-center relative overflow-hidden">
+            <h1 id="hero-title" class="text-5xl md:text-8xl font-extrabold tracking-tighter text-main mb-6 relative z-10 overflow-hidden"></h1>
+            <p id="hero-subtitle" class="text-lg md:text-xl text-secondary max-w-3xl mx-auto relative z-10 g-fade-up" style="opacity: 0;">
+                A curated collection of articles on <span id="typewriter-text" class="text-accent font-semibold"></span>
+            </p>
+        </section>
+
+        <section id="horizontal-scroll-section" class="relative">
+            <div id="horizontal-scroll-container" class="flex items-center space-x-8">
+            </div>
+        </section>
+
+        <div class="container mx-auto px-6 py-20">
+            <section id="latest-post-section" class="mb-20">
+            </section>
+
+            <section class="mb-16">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-10 g-fade-up">
+                    <h2 class="text-3xl font-bold text-main tracking-tight mb-4 md:mb-0">All Posts</h2>
+                    <div id="category-filters" class="flex flex-wrap gap-2 justify-center"></div>
+                </div>
+                <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+                <p id="no-results" class="hidden text-center text-secondary py-16 text-lg">No articles found.</p>
+            </section>
+
+            <section id="about-section" class="my-20 g-fade-up">
+                 <h2 class="text-3xl font-bold text-main tracking-tight text-center mb-12">About Me</h2>
+                <div class="bg-card border border-main rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-12">
+                    <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden flex-shrink-0">
+                       <!-- <img src="favicon-uni.svg" alt="Svg Exist Here" class="w-full h-full "> -->
+                    </div>
+                    <div>
+                        <h3 class="text-3xl font-bold text-main">Hello, I'm Abhilash</h3>
+                        <p class="text-secondary mt-4 text-lg leading-relaxed">This blog is where I share my journey, insights, and the occasional breakthrough.</p>
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            <span class="bg-main border border-main rounded-full px-4 py-2 text-sm font-medium">Web Development</span>
+                            <span class="bg-main border border-main rounded-full px-4 py-2 text-sm font-medium">AI & ML</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="faq-section" class="my-20">
+                <h2 class="text-3xl font-bold text-main tracking-tight text-center mb-12 g-fade-up">Frequently Asked Questions</h2>
+                <div id="faq-container" class="max-w-3xl mx-auto space-y-4">
+                    <div class="bg-card border border-main rounded-xl overflow-hidden g-fade-up">
+                        <button class="faq-toggle w-full flex justify-between items-center text-left p-6 hover-target">
+                            <span class="font-semibold text-main">What is the main focus of this blog?</span>
+                            <i data-feather="chevron-down" class="w-5 h-5 text-secondary transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-answer px-6">
+                            <p class="pb-6 text-secondary">This blog explores the intersection of Artificial Intelligence, advanced Web Development, and future technologies. We aim to provide deep insights, practical tutorials, and thought-provoking analysis on the innovations shaping our world.</p>
+                        </div>
+                    </div>
+                     <div class="bg-card border border-main rounded-xl overflow-hidden g-fade-up">
+                        <button class="faq-toggle w-full flex justify-between items-center text-left p-6 hover-target">
+                            <span class="font-semibold text-main">Who is this content for?</span>
+                            <i data-feather="chevron-down" class="w-5 h-5 text-secondary transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-answer px-6">
+                            <p class="pb-6 text-secondary">Our content is for curious minds, developers, designers, and tech enthusiasts who want to stay at the forefront of technology. Whether you're a seasoned professional or just starting, you'll find valuable and engaging articles here.</p>
+                        </div>
+                    </div>
+                     <div class="bg-card border border-main rounded-xl overflow-hidden g-fade-up">
+                        <button class="faq-toggle w-full flex justify-between items-center text-left p-6 hover-target">
+                            <span class="font-semibold text-main">How often is new content published?</span>
+                            <i data-feather="chevron-down" class="w-5 h-5 text-secondary transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-answer px-6">
+                             <p class="pb-6 text-secondary">We strive to publish new, high-quality articles . You can subscribe to our newsletter through the contact form to get notified about the latest posts and insights directly in your inbox.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="contact-section" class="my-20 g-fade-up">
+                 <div class="bg-card border border-main rounded-2xl p-8 md:p-12 text-center">
+                    <h2 class="text-3xl font-bold text-main tracking-tight">Get In Touch</h2>
+                    <p class="text-secondary mt-3 mb-8 max-w-xl mx-auto">Have a project in mind or just want to say hello? I’d love to hear from you. Fill out the form below or reach out via my social channels.</p>
+                    <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" class="max-w-xl mx-auto text-left space-y-4">
+                        <input type="hidden" name="access_key" value="5822fd72-2c70-464a-821f-80928a306c59">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="name" class="text-sm font-medium text-secondary">Name</label>
+                                <input type="text" id="name" name="name" class="mt-1 w-full bg-main border border-main rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 ring-accent text-sm hover-target" required>
+                            </div>
+                             <div>
+                                <label for="email" class="text-sm font-medium text-secondary">Email</label>
+                                <input type="email" id="email" name="email" class="mt-1 w-full bg-main border border-main rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 ring-accent text-sm hover-target" required>
+                            </div>
+                        </div>
+                        <div>
+                             <label for="message" class="text-sm font-medium text-secondary">Message</label>
+                             <textarea id="message" name="message" rows="4" class="mt-1 w-full bg-main border border-main rounded-lg py-2.5 px-4 focus:outline-none focus:ring-2 ring-accent text-sm hover-target" required></textarea>
+                        </div>
+                        <div class="text-center pt-4">
+                            <button type="submit" class="bg-accent text-white font-bold py-3 px-10 rounded-full hover:opacity-80 transition-opacity transform hover:scale-105 hover-target" data-magnetic>Send Message</button>
+                        </div>
+                        <div id="form-result" class="text-center mt-4 text-sm"></div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer class="border-t border-main">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left gap-4">
+                <p class="text-secondary text-sm">&copy; 2025 Aetherium. All rights reserved.</p>
+                <div class="flex space-x-4 items-center">
+                    <a href="https://x.com/sherlock_9886_" class="text-secondary hover:text-accent hover-target" target="_blank" data-magnetic><i data-feather="twitter" class="w-5 h-5"></i></a>
+                    <a href="https://github.com/abhilashpuli98" class="text-secondary hover:text-accent hover-target" target="_blank" data-magnetic><i data-feather="github" class="w-5 h-5"></i></a>
+                    <a href="https://www.linkedin.com/in/abhilash-puli" class="text-secondary hover:text-accent hover-target" target="_blank" data-magnetic><i data-feather="linkedin" class="w-5 h-5"></i></a>
+                    <a href="https://medium.com/@sherlockholmes9886" class="text-secondary hover:text-accent hover-target" data-magnetic>
+                    <img 
+                        src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/medium.svg" 
+                        alt="Medium" 
+                        class="w-5 h-5" 
+                    />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            feather.replace();
+            gsap.registerPlugin(ScrollTrigger);
+            
+            const preloaderTextContainer = document.querySelector('.preloader-text');
+            const preloaderText = "Aetherium";
+            preloaderText.split('').forEach(char => {
+                const span = document.createElement('span');
+                span.className = 'preloader-char';
+                span.textContent = char;
+                preloaderTextContainer.appendChild(span);
+            });
+            
+            gsap.to('.preloader-char', {
+                y: 0,
+                stagger: 0.05,
+                delay: 0.2,
+                duration: 1,
+                ease: 'power4.out'
+            });
+
+            window.onload = () => {
+                setTimeout(() => {
+                    document.getElementById('preloader').classList.add('loaded');
+                    
+                    gsap.to(".g-word", { y: 0, stagger: 0.1, duration: 1.5, ease: 'power4.out', delay: 0.2 });
+                    gsap.to("#hero-subtitle", { opacity: 1, y: 0, duration: 1, ease: 'power2.out', delay: 0.8 });
+                    setTimeout(type, 1500);
+                    
+                    ScrollTrigger.batch(".g-fade-up", {
+                        onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.15 }),
+                        start: "top 85%",
+                        once: true
+                    });
+
+                }, 1500);
+            };
+
+            const articles = [
+                { title: 'The Art of Making the Internet Talk Back : Python × APIs', category: 'Web Development', date: 'October 02, 2025', imageUrl: 'https://chisellabs.com/glossary/wp-content/uploads/2021/06/What-is-an-API.png', link: 'https://abhilashpuli98.github.io/Articles/Blog-API/python-rest-api.html', featured: true, author: 'By Abhilash Puli' },
+                { title: 'LSTMs All You Need', category: 'AI & Machine Learning', date: 'October 29, 2025', imageUrl: 'https://colah.github.io/posts/2015-08-Understanding-LSTMs/img/RNN-shorttermdepdencies.png', link: '', featured: true, author: 'By Sowjanya M' },
+                { title: 'Coming Soon', category: 'None', date: 'Invalid Date', imageUrl: 'https://img.freepik.com/free-vector/abstract-coming-soon-halftone-style-background-design_1017-27282.jpg?w=1800', link: '#', featured: true, author: 'None' },
+            ];
+
+            const articlesWithValidDates = articles.filter(a => !isNaN(new Date(a.date)));
+            let latestArticle = null;
+
+            if (articlesWithValidDates.length > 0) {
+                 latestArticle = articlesWithValidDates.reduce((latest, current) => {
+                    return new Date(current.date) > new Date(latest.date) ? current : latest;
+                });
+            }
+
+            const latestPostSection = document.getElementById('latest-post-section');
+            if (latestArticle && latestPostSection) {
+                latestPostSection.innerHTML = `
+                    <h2 class="text-3xl font-bold text-main tracking-tight text-center mb-12 g-fade-up">Latest Insight</h2>
+                    <div class="g-fade-up">
+                         <div class="bg-card border border-main rounded-2xl p-6 md:grid md:grid-cols-5 gap-8 items-center card-container">
+                            <div class="md:col-span-2 aspect-[16/10] overflow-hidden rounded-lg mb-6 md:mb-0">
+                                <a href="${latestArticle.link}" target="_blank" class="block h-full group">
+                                    <img src="${latestArticle.imageUrl}" alt="${latestArticle.title}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 ease-out">
+                                </a>
+                            </div>
+                            <div class="md:col-span-3">
+                                <span class="bg-accent text-white text-xs font-bold uppercase tracking-wider rounded-full px-3 py-1">Latest Post</span>
+                                <h3 class="text-3xl font-bold text-main mt-4">${latestArticle.title}</h3>
+                                <p class="text-secondary mt-3">Published on ${latestArticle.date} in <span class="font-semibold text-main">${latestArticle.category}</span></p>
+                                <p class="text-secondary mt-2 text-sm italic">${latestArticle.author}</p>
+                                <a href="${latestArticle.link}" target="_blank" class="inline-block mt-6 font-semibold text-accent hover:underline">Read Article &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorOutline = document.querySelector('.cursor-outline');
+            let mouseX = 0, mouseY = 0;
+
+            gsap.to({}, 0.016, {
+                repeat: -1,
+                onRepeat: () => {
+                    gsap.set(cursorOutline, { css: { left: mouseX, top: mouseY } });
+                    gsap.set(cursorDot, { css: { left: mouseX, top: mouseY } });
+                }
+            });
+
+            window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+            
+            function applyHoverEffects() {
+                document.querySelectorAll('.hover-target').forEach(el => {
+                    el.addEventListener('mouseenter', () => gsap.to(cursorOutline, { scale: 1.5, duration: 0.3, background: 'rgba(255,255,255,0.2)' }));
+                    el.addEventListener('mouseleave', () => gsap.to(cursorOutline, { scale: 1, duration: 0.3, background: 'transparent' }));
+                });
+            }
+
+            function applyMagneticEffects() {
+                document.querySelectorAll('[data-magnetic]').forEach(el => {
+                    if (el.dataset.magneticApplied) return;
+                    el.dataset.magneticApplied = true;
+                    el.addEventListener('mousemove', e => {
+                        const { clientX, clientY } = e;
+                        const { left, top, width, height } = el.getBoundingClientRect();
+                        const x = clientX - (left + width / 2);
+                        const y = clientY - (top + height / 2);
+                        gsap.to(el, { x: x * 0.4, y: y * 0.4, duration: 0.7, ease: 'power3.out' });
+                    });
+                    el.addEventListener('mouseleave', () => gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' }));
+                });
+            }
+            applyHoverEffects();
+            applyMagneticEffects();
+
+            function apply3DTilt() {
+                document.querySelectorAll('.card-container, .project-card').forEach(card => {
+                    card.addEventListener('mousemove', (e) => {
+                        const { left, top, width, height } = card.getBoundingClientRect();
+                        const x = e.clientX - left - width / 2;
+                        const y = e.clientY - top - height / 2;
+                        const rotateX = -y / height * 15;
+                        const rotateY = x / width * 15;
+                        gsap.to(card, {
+                            transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`,
+                            boxShadow: "0 0 70px -10px var(--accent-glow)",
+                            borderColor: "var(--accent-color)",
+                            duration: 0.7,
+                            ease: 'power3.out'
+                        });
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        gsap.to(card, {
+                            transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)',
+                            boxShadow: "0 0 50px -10px transparent",
+                             borderColor: "var(--border-color)",
+                            duration: 1,
+                            ease: 'elastic.out(1, 0.5)'
+                        });
+                    });
+                });
+            }
+
+            const themeSwitcher = document.getElementById('theme-switcher');
+            const html = document.documentElement;
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            
+            function setTheme(theme) {
+                const sunIcon = themeSwitcher.querySelector('[data-feather="sun"]');
+                const moonIcon = themeSwitcher.querySelector('[data-feather="moon"]');
+                html.classList.remove('light', 'dark');
+                html.classList.add(theme);
+                localStorage.setItem('theme', theme);
+                if (theme === 'dark') {
+                    gsap.to(sunIcon, { rotate: 45, scale: 0, duration: 0.5, ease: 'power2.inOut' });
+                    gsap.to(moonIcon, { rotate: 0, scale: 1, duration: 0.5, ease: 'power2.inOut' });
+                } else {
+                    gsap.to(sunIcon, { rotate: 0, scale: 1, duration: 0.5, ease: 'power2.inOut' });
+                    gsap.to(moonIcon, { rotate: -45, scale: 0, duration: 0.5, ease: 'power2.inOut' });
+                }
+            }
+            setTheme(savedTheme);
+            themeSwitcher.addEventListener('click', () => setTheme(html.classList.contains('dark') ? 'light' : 'dark'));
+
+            const heroTitle = document.getElementById('hero-title');
+            const titleText = "Insights & Innovations";
+            titleText.split(' ').forEach(word => {
+                let wordDiv = document.createElement('div');
+                wordDiv.className = "g-word";
+                wordDiv.textContent = word + '\u00A0';
+                heroTitle.appendChild(wordDiv);
+            });
+            
+            const typewriterText = document.getElementById('typewriter-text');
+            const topics = ["AI.", "Web Development.", "Future Technology."];
+            let topicIndex = 0; let charIndex = 0;
+            function type() {
+                if (charIndex < topics[topicIndex].length) {
+                    typewriterText.textContent += topics[topicIndex].charAt(charIndex);
+                    charIndex++;
+                    setTimeout(type, 100);
+                } else { setTimeout(erase, 2000); }
+            }
+            function erase() {
+                if (charIndex > 0) {
+                    typewriterText.textContent = topics[topicIndex].substring(0, charIndex - 1);
+                    charIndex--;
+                    setTimeout(erase, 50);
+                } else {
+                    topicIndex = (topicIndex + 1) % topics.length;
+                    setTimeout(type, 500);
+                }
+            }
+
+            const horizontalContainer = document.getElementById('horizontal-scroll-container');
+            articles.filter(a => a.featured).forEach(article => {
+                const articleEl = document.createElement('div');
+                articleEl.className = 'horizontal-card bg-card rounded-2xl overflow-hidden flex flex-col hover-target card-container relative';
+                articleEl.innerHTML = `
+                    <img src="${article.imageUrl}" alt="${article.title}" class="absolute inset-0 w-full h-full object-cover z-0">
+                    <div class="absolute inset-0 bg-black/60 z-10"></div>
+                    <div class="p-8 flex flex-col flex-grow justify-end relative z-20 text-white">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-accent">${article.category}</span>
+                        <h3 class="text-3xl font-bold mt-2 mb-3">${article.title}</h3>
+                        <p class="text-sm italic opacity-80">${article.author}</p>
+                        <div class="mt-4">
+                           <a href="${article.link}" target="_blank" class="font-semibold text-accent hover:underline">Read Article &rarr;</a>
+                        </div>
+                    </div>
+                `;
+                horizontalContainer.appendChild(articleEl);
+            });
+
+            gsap.to(horizontalContainer, {
+                x: () => -(horizontalContainer.scrollWidth - document.documentElement.clientWidth) + "px",
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#horizontal-scroll-section",
+                    start: "top top",
+                    end: () => "+=" + (horizontalContainer.scrollWidth - document.documentElement.clientWidth),
+                    scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true,
+                }
+            });
+
+            const articlesGrid = document.getElementById('articles-grid');
+            const categoryFiltersContainer = document.getElementById('category-filters');
+            let currentFilter = 'All';
+
+            const renderArticles = (items) => {
+                const searchTerm = document.getElementById('search-input').value.toLowerCase();
+                const filtered = items.filter(a => 
+                    (currentFilter === 'All' || a.category === currentFilter) &&
+                    (a.title.toLowerCase().includes(searchTerm))
+                );
+
+                articlesGrid.innerHTML = '';
+                document.getElementById('no-results').style.display = filtered.length === 0 ? 'block' : 'none';
+
+                filtered.forEach(article => {
+                    const articleEl = document.createElement('div');
+                    articleEl.className = 'card-container bg-card rounded-2xl overflow-hidden flex flex-col hover-target g-fade-up';
+                    articleEl.innerHTML = `
+                        <a href="${article.link}" target="_blank" class="block aspect-[16/10] overflow-hidden">
+                            <img src="${article.imageUrl}" alt="${article.title}" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700 ease-out">
+                        </a>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-accent">${article.category}</span>
+                            <h3 class="text-xl font-bold mt-2 mb-3 text-main flex-grow">${article.title}</h3>
+                            <p class="text-sm text-secondary italic mb-2">${article.author}</p>
+                            <div class="mt-auto pt-2">
+                               <p class="text-sm text-secondary">${article.date}</p>
+                            </div>
+                        </div>
+                    `;
+                    articlesGrid.appendChild(articleEl);
+                });
+                
+                apply3DTilt();
+                ScrollTrigger.batch("#articles-grid .g-fade-up", {
+                    onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.1 }),
+                    start: "top 90%", once: true
+                });
+                ScrollTrigger.refresh();
+            };
+
+            const renderFilters = (articlesForCategories) => {
+                const categories = ['All', ...new Set(articlesForCategories.map(a => a.category).filter(c => c !== 'None'))];
+                categoryFiltersContainer.innerHTML = '';
+                categories.forEach(cat => {
+                    const button = document.createElement('button');
+                    button.textContent = cat;
+                    button.dataset.magnetic = '';
+                    button.className = `px-4 py-2 rounded-full text-sm font-medium border transition-colors hover-target ${currentFilter === cat ? 'bg-accent text-white border-accent' : 'bg-transparent border-main hover:border-accent'}`;
+                    button.onclick = () => {
+                        currentFilter = cat;
+                        renderFilters(articles.filter(a => a.title !== latestArticle?.title));
+                        renderArticles(regularArticles);
+                    };
+                    categoryFiltersContainer.appendChild(button);
+                });
+                applyMagneticEffects();
+            };
+            
+            const regularArticles = articles.filter(a => (!latestArticle || a.title !== latestArticle.title) && a.category !== 'None');
+            document.getElementById('search-input').addEventListener('input', () => renderArticles(regularArticles));
+            renderFilters(articles.filter(a => !latestArticle || a.title !== latestArticle.title));
+            renderArticles(regularArticles);
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            apply3DTilt();
+            
+            document.querySelectorAll('.faq-toggle').forEach(button => {
+                button.addEventListener('click', () => {
+                    const answer = button.nextElementSibling;
+                    const icon = button.querySelector('i');
+                    const isOpen = answer.classList.contains('open');
+
+                    document.querySelectorAll('.faq-answer.open').forEach(openAnswer => {
+                        openAnswer.classList.remove('open');
+                        gsap.to(openAnswer, {paddingBottom: 0, duration: 0.5, ease: 'power3.out'});
+                        gsap.to(openAnswer.previousElementSibling.querySelector('i'), {rotate: 0, duration: 0.3});
+                    });
+
+                    if (!isOpen) {
+                        answer.classList.add('open');
+                        gsap.to(answer, {paddingBottom: '1.5rem', duration: 0.5, ease: 'power3.out'});
+                        gsap.to(icon, {rotate: 180, duration: 0.3});
+                    }
+                });
+            });
+            
+            const form = document.getElementById('contact-form');
+            const result = document.getElementById('form-result');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                result.innerHTML = "Please wait...";
+                result.className = "text-center mt-4 text-sm text-secondary";
+
+                fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        result.innerHTML = "Success! Your message has been sent.";
+                        result.className = "text-center mt-4 text-sm text-green-500";
+                        form.reset();
+                    } else {
+                        result.innerHTML = `Error: ${data.message}`;
+                        result.className = "text-center mt-4 text-sm text-red-500";
+                    }
+                })
+                .catch(error => {
+                    result.innerHTML = "An error occurred. Please try again.";
+                    result.className = "text-center mt-4 text-sm text-red-500";
+                });
+            });
+
+        });
+    </script>
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function (e) {
+            if (e.keyCode == 123) { return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
+        };
+    </script>
 </body>
 </html>
+
