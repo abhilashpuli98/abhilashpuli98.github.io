@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Hidden Engineering Behind Emojis: How 🫠 Transforms from Code to Emotion</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --yellow-primary: #FFCC4D;
+            --brown-accent: #664500;
+            --dark-text: #2d3436;
+            --light-bg: #faf9f6;
+            --white: #ffffff;
+            --code-bg: #1e1e1e;
+            --mac-red: #ff5f56;
+            --mac-yellow: #ffbd2e;
+            --mac-green: #27c93f;
+            --shadow-soft: 0 15px 35px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--light-bg);
+            color: #333;
+            font-family: 'Merriweather', serif;
+            line-height: 1.9;
+            font-size: 18px;
+            overflow-x: hidden;
+        }
+
+        .progress-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 6px;
+            background: transparent; z-index: 9999;
+        }
+        .progress-bar {
+            height: 6px;
+            background: linear-gradient(90deg, var(--yellow-primary), var(--brown-accent));
+            width: 0%;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 80px auto;
+            background: var(--white);
+            padding: 70px 90px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .container { width: 95%; padding: 40px 25px; margin: 40px auto; }
+            body { font-size: 17px; }
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark-text);
+            font-weight: 800;
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: 2.6em;
+            line-height: 1.25;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+            background: -webkit-linear-gradient(45deg, #1a1a1a, #664500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-top: 60px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid rgba(255, 204, 77, 0.3);
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            color: var(--brown-accent);
+        }
+
+        p { margin-bottom: 28px; }
+
+        .mark {
+            background: linear-gradient(120deg, rgba(255, 204, 77, 0) 0%, rgba(255, 204, 77, 0.25) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 45%;
+            background-position: 0 90%;
+            padding: 0 2px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        a {
+            color: var(--brown-accent);
+            text-decoration: none;
+            border-bottom: 2px solid var(--yellow-primary);
+            transition: background 0.2s;
+        }
+        a:hover { background-color: var(--yellow-primary); color: #000; }
+
+        figure { margin: 45px 0; width: 100%; display: block; }
+        img {
+            max-width: 100%; height: auto; display: block; margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        figcaption {
+            font-family: 'Poppins', sans-serif; font-size: 0.85em;
+            color: #888; text-align: center; margin-top: 15px; font-weight: 500;
+        }
+        .video-wrapper {
+            position: relative; padding-bottom: 56.25%; height: 0;
+            overflow: hidden; border-radius: 12px;
+            box-shadow: var(--shadow-soft); background: #000;
+        }
+        .video-wrapper iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: #e0e0e0;
+            padding: 50px 25px 25px 25px;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85em;
+            line-height: 1.6;
+            overflow-x: auto;
+            position: relative;
+            margin: 35px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            border: 1px solid #333;
+        }
+        pre::before {
+            content: ""; position: absolute; top: 0; left: 0;
+            width: 100%; height: 36px; background-color: #252526;
+            border-bottom: 1px solid #333; border-radius: 10px 10px 0 0; z-index: 1;
+        }
+        pre::after {
+            content: ""; position: absolute; top: 12px; left: 15px;
+            width: 12px; height: 12px; border-radius: 50%; background: var(--mac-red);
+            box-shadow: 20px 0 0 var(--mac-yellow), 40px 0 0 var(--mac-green); z-index: 2;
+        }
+        code {
+            font-family: 'Fira Code', monospace;
+            background: rgba(255, 204, 77, 0.2);
+            padding: 2px 6px; border-radius: 4px;
+            font-size: 0.9em; color: #d63384;
+        }
+        pre code { background: transparent; color: inherit; padding: 0; border-radius: 0; }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+        .tech-card {
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-top: 5px solid #ccc;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+        .tech-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .tech-card i {
+            font-size: 2.5em; margin-bottom: 20px; display: block;
+        }
+        .tech-card h4 {
+            font-family: 'Poppins', sans-serif; font-weight: 700;
+            margin-bottom: 15px; font-size: 1.1em;
+        }
+        .tech-card p {
+            font-size: 0.9em; margin-bottom: 0; line-height: 1.6; color: #666;
+        }
+        .card-bitmap { border-top-color: #e74c3c; } .card-bitmap i { color: #e74c3c; }
+        .card-svg { border-top-color: #3498db; } .card-svg i { color: #3498db; }
+        .card-colr { border-top-color: #2ecc71; } .card-colr i { color: #2ecc71; }
+
+        .flowchart-container {
+            text-align: center;
+            margin: 60px 0;
+            background: #f8f9fa;
+            padding: 40px 20px;
+            border-radius: 16px;
+            border: 2px dashed #e0e0e0;
+        }
+        .flowchart-label {
+            font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.5em;
+            color: var(--dark-text); margin-bottom: 20px; display: block;
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+        .flowchart-pre {
+            display: inline-block; text-align: left; margin: 0 auto;
+            max-width: 100%; margin-top: 0; margin-bottom: 0;
+        }
+
+        .toc-container {
+            background: #ffffff;
+            border-left: 5px solid var(--yellow-primary);
+            padding: 30px 40px;
+            margin: 50px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-radius: 4px 12px 12px 4px;
+        }
+        .toc-container h4 {
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .toc-container ol {
+            margin: 0; padding: 0; list-style: none;
+            counter-reset: toc-counter;
+        }
+        .toc-container li {
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--dark-text);
+            transition: transform 0.2s ease, color 0.2s ease;
+            cursor: pointer;
+        }
+        .toc-container li:hover {
+            transform: translateX(5px);
+            color: var(--brown-accent);
+        }
+        .toc-container li::before {
+            content: counter(toc-counter, decimal-leading-zero);
+            counter-increment: toc-counter;
+            position: absolute;
+            left: 0; top: 0;
+            font-family: 'Fira Code', monospace;
+            color: var(--mac-red);
+            font-weight: normal;
+            font-size: 0.9em;
+        }
+
+        .header-meta {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 25px; border-bottom: 1px solid #eee;
+            flex-wrap: wrap; gap: 15px; font-family: 'Poppins', sans-serif;
+        }
+        .byline { margin: 0; font-size: 0.95em; color: #999; }
+        .social-icons a {
+            margin-left: 12px; font-size: 1.3em; color: #bbb; border: none;
+            transition: transform 0.2s;
+        }
+        .social-icons a:hover { color: var(--brown-accent); background: none; transform: translateY(-3px); }
+
+        blockquote {
+            background: #fffbeb; border-left: 6px solid var(--yellow-primary);
+            margin: 35px 0; padding: 25px 35px; border-radius: 0 12px 12px 0;
+            font-style: italic; color: #555; font-size: 1.1em;
+        }
+
+        .timeline { position: relative; margin: 50px 0; }
+        .timeline::before {
+            content: ''; position: absolute; left: 24px; top: 0; bottom: 0;
+            width: 3px; background: #eee;
+        }
+        .pipeline-step { display: flex; margin-bottom: 30px; position: relative; }
+        .pipeline-number {
+            flex-shrink: 0; width: 50px; height: 50px;
+            background: var(--yellow-primary); color: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-family: 'Poppins', sans-serif; font-size: 1.2em;
+            margin-right: 25px; z-index: 2; border: 4px solid #fff;
+            box-shadow: 0 4px 10px rgba(255, 204, 77, 0.4);
+        }
+        .pipeline-content {
+            background: #fff; border: 1px solid #eee; padding: 25px;
+            border-radius: 12px; width: 100%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: transform 0.2s;
+        }
+        .pipeline-content:hover { transform: translateX(5px); border-left: 4px solid var(--yellow-primary); }
+
+        .footer {
+            text-align: center; margin-top: 100px; padding-top: 50px;
+            border-top: 1px solid #eee; font-size: 0.9em; color: #aaa;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @keyframes melt {
+            0% { transform: scaleY(1); }
+            50% { transform: scaleY(0.7) skewX(10deg) translateY(5px); }
+            100% { transform: scaleY(1); }
+        }
+        .melting-emoji { display: inline-block; animation: melt 3s infinite ease-in-out; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="myBar"></div>
+    </div>
+
+    <div class="container">
+        
+        <div class="animated fadeInDown">
+            <h1>The Hidden Engineering Behind Emojis: How <span class="melting-emoji" title="Help, I'm melting!"><span>🫠</span>🫠</span> Transforms from Code to Emotion</h1>
+            
+            <div class="header-meta">
+                <p class="byline">By <strong>Abhilash Puli</strong> | October 2025</p>
+                <div class="social-icons">
+                    <a href="mailto:sherlockholmes9886@gmail.com"><i class="fa fa-envelope-o"></i></a>
+                    <a href="https://www.linkedin.com/in/abhilash-puli" target="_blank"><i class="fa fa-linkedin"></i></a>
+                    <a href="https://medium.com/@abhilashpuli" target="_blank"><i class="fa fa-medium"></i></a>
+                    <a href="https://github.com/abhilashpuli98" target="_blank"><i class="fa fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="toc-container animated fadeInUp">
+            <h4>Table of Contents</h4>
+            <ol>
+                <li>The Invisible Architecture</li>
+                <li>ACT I: The Movement Before Emoji</li>
+                <li>ACT II: From Thoughts to Bytes</li>
+                <li>ACT III: When Code Meets Design</li>
+                <li>ACT IV: How Color Emojis Actually Work</li>
+                <li>ACT V: Rendering Pipeline</li>
+                <li>ACT VI: Why Your Emoji Looks Different Than Mine</li>
+                <li>ACT VII: The Psychology of Pixel Emotion</li>
+            </ol>
+        </div>
+
+        <div class="animated fadeInUp">
+            <h2>The Invisible Architecture</h2>
+            
+            <p>This Blog is an Journey Through the Invisible Architecture that turn’s a Block of code into an emotion.</p>
+
+            <figure>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/Bf_uKbrKbjQ" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <figcaption><strong>Emoji Rendering Pipeline: UTF-8 to Visuals</strong></figcaption>
+            </figure>
+
+            <p><em>We talk to our friends and fam every day, and honestly, we throw in the 🫠 emoji constantly while chatting.</em></p>
+
+            <p>Three seconds. May be less. A thought turns into a feeling, the feeling turns into pixels and suddenly they get you, perfectly: that overwhelming sense of melting under life’s absurd chaos. Now you might me Think of what this “overwhelming sense of melting under life’s absurd chaos”? isn’t it?</p>
+
+            <p>Leme clear what do that exactly mean too!</p>
+
+            <blockquote>
+                Feeling like everything in life is too much too crazy. In simple it’s just Happiness out of Control.
+            </blockquote>
+
+            <p><strong>But have you ever just stopped to wonder what just happend in this millisecond time interval?</strong> Between your tap and their screen, a whole unseen world of engineering come a live.</p>
+
+            <p><span class="mark">Unicodes gives meaning, bytes carry the message, fonts give it’s personality, and renderers paint it into light.</span> In just milliseconds, raw code transforms into a real Human Emotion.</p>
+
+            <p>This is the Hidden Story of ‘Emoji’ , a digital symbol crafed from a tap to language , design and tech. Suprisingly a Beautiful Engineering.</p>
+        </div>
+
+        <div class="animated fadeInUp">
+            <h2>ACT I: The Movement Before Emoji</h2>
+
+            <p>For Instance: You’re typing a message. Your brain decides “I Need to send that melting Face. Your finger hovers over the keyboard.</p>
+            <p>what happens next isn’t a magic , but it feels like it.</p>
+            <p>When you tap on 🫠, you’re not choosing a picture, you’re triggering a <span class="mark">code point in the Unicode</span> (a.k.s UTF-8) the global system that assigns a meaning to every character used on every device.</p>
+
+            <blockquote>
+                It say’s “Hey it’s just a symbol represents a melting face, nothing more, nothing less”.
+            </blockquote>
+
+            <p>🫠 lives at <span class="mark">U+1FAE0</span>, its universal identity. <em>Whether you’re on an iPhone in Guntur or a laptop in Chennai, <code>U+1FAE0</code> always means melting face</em>. Unicode doesn’t decides what it looks like, only what it means.</p>
+            <p><em>Just think of it’s like a Word dictionary in which Unicode is the Key and value is the Specific meaning.</em></p>
+        </div>
+
+        <div class="animated fadeInUp">
+            <h2>ACT II: From Thoughts to Bytes</h2>
+            <p style="color: #888; font-family: 'Poppins', sans-serif; font-size: 0.9em; letter-spacing: 1px; text-transform: uppercase;">(a.k.a The Encoding Journey)</p>
+
+            <p>So you triggred 🫠. Your Device now holds the code point <code>U+1FAE0</code>. But we Know computers don’t Understand and Speak Unicode diretly right. They speak binary(1|0),the only language machines Understand.</p>
+            <p>This is where <span class="mark">UTF-8 encoding</span> came into picture. Just imagine UTF-8 is just like a translator. it takes the Unicode code point and turns into a sequence of Bytes That travel Through the Network and Memory. it’s Basically the Postal service of digitial world.</p>
+
+            <p><strong>Transformation Example:</strong></p>
+            
+            <pre><code>Code Point: U+1FAE0
+Binary:     0001 1111 1010 1110 0000
+UTF-8:      F0 9F AB A0 (four bytes)</code></pre>
+
+            <blockquote>
+                <em>The melting face 🫠 becomes four Bytes: ‘F0 9F AB A0’</em>
+            </blockquote>
+
+            <p>The first Byte (F0)signals the start of first four-byte sequence, and carry rest of content.</p>
+            
+            <blockquote>
+                <em>But why UTF-8 why not ASCII?</em>
+            </blockquote>
+
+            <p>UTF-8’s Advantage is it’s backward compatibility,Efficient storage and Facilitabe vast number of languages char’s,older ASCII syatems don’t crash when they encounter emoji’s; they Just skip simply.</p>
+            
+            <p>Just Think of UTF-8 as a <span class="mark">smart College Bag</span>, fitting emojis, Chinese characters, Arabic script, and more into standard byte-sized Stuff that every computer can handle.</p>
+        </div>
+
+        <div class="animated fadeInUp">
+            <h2>ACT III: When Code Meets Design</h2>
+
+            <p>Now those four Bytes travel throughyour device.they Reach the operating system which asks a crutial question.</p>
+            <p>“what does U+1FAE0 look like?” This is where fonts enter into the Flow.</p>
+            <p>A font isn’t just a collection of letter shapes. Modern fonts are vast libraries of <strong>glyphs-</strong>visual representations of characters. And for emojis, these <a href="#" target="_blank"><strong>glyphs</strong></a> are works of art.</p>
+
+            <ul style="background: #fcfcfc; padding: 25px 40px; border-radius: 12px; border: 1px dashed #ccc;">
+                <li><strong>Apple</strong> designs emojis with a glossy, three-dimensional style — friendly and slightly playful</li>
+                <li><strong>Google</strong> opts for flatter, more cartoonish designs with bold outlines</li>
+                <li><strong>Microsoft</strong> creates simpler, often two-dimensional interpretations</li>
+                <li><strong>Samsung</strong> has its own distinct personality (remember their infamous blob emojis 🫡?)</li>
+            </ul>
+
+            <figure>
+                <img src="https://miro.medium.com/v2/resize:fit:1400/1*YKfr7unuxIuDjVuAYzZgdg.png" alt="Different Visual Representations With same UTF-8 code">
+                <figcaption><strong>Different Visual Representations With same UTF-8 code</strong></figcaption>
+            </figure>
+
+            <p>Unicode only standardizes the Meaning , not appearance.It’s like how the concept of “love” is universal, but every culture expresses it differently.</p>
+            <p>Your device checks which font to use. On iOS,’it’s Apple Color Emoji’, On Android it’s “Noto Color Emoji”.</p>
+
+            <pre><code>🫠 Emoji tap
+     ↓
+UTF-8 bytes: F0 9F AB A0
+     ↓
+Operating System
+     ↓
+"Which font handles U+1FAE0?"
+     ↓
+Emoji Font selected
+ (Apple Color Emoji / Noto Color Emoji / Segoe UI Emoji ...)
+     ↓
+Glyph lookup for U+1FAE0</code></pre>
+        </div>
+
+        <div class="animated fadeInUp">
+            <h2>ACT IV: How Color Emojis Actually Work</h2>
+            <p style="color: #888; font-family: 'Poppins', sans-serif; font-size: 0.9em; letter-spacing: 1px; text-transform: uppercase;">(The Technical Deep Dive)</p>
+
+            <p>Traditional fonts are simple: they store outlines of letters in black. Your system colors them as needed.But emojis are <span class="mark">full-color</span>, often with gradients, shading, and multiple layers. How do you store that?</p>
+            <p>There are three main approaches:</p>
+
+            <div class="tech-grid">
+                
+                <div class="tech-card card-bitmap">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                    <h4>1. Bitmap Fonts (PNG)</h4>
+                    <p>Tiny PNG images stored inside the font file. Fast, but gets <strong>pixelated</strong> if you zoom in. Easy to implement but not scalable.</p>
+                </div>
+
+                <div class="tech-card card-svg">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <h4>2. SVG Fonts (Vector)</h4>
+                    <p>Mathematical shapes. Scales infinitely without losing quality. Even zoom in <strong>1000x</strong>, still sharp. Used by Mozilla/Adobe.</p>
+                </div>
+
+                <div class="tech-card card-colr">
+                    <i class="fa fa-clone" aria-hidden="true"></i>
+                    <h4>3. COLR/CPAL Tables</h4>
+                    <p>Layered shapes. Microsoft & Google use this. Each layer uses a specific color palette. Like a <strong>digital printing press</strong>.</p>
+                </div>
+
+            </div>
+
+            <p>Here is what the code looks like for the vector approach:</p>
+            <pre><code>&lt;svg viewBox="0 0 36 36"&gt;
+  &lt;circle cx="18" cy="18" r="18" fill="#FFCC4D"/&gt;
+  &lt;path d="M18,30c-2.2,0-4-1.8-4-4h8C22,28.2,20.2,30,18,30z" fill="#664500"/&gt;
+&lt;/svg&gt;</code></pre>
+
+            <p>And for the Layered (COLR) approach:</p>
+            <pre><code>Layer 1: Face outline (yellow #FFCC4D)
+Layer 2: Eyes (brown #664500)
+Layer 3: Mouth curve (brown #664500)
+Layer 4: Melting effect gradient (yellow to transparent)</code></pre>
+        </div>
+
+        <div class="animated fadeInUp">
+            <h2>ACT V: Rendering Pipeline</h2>
+            <p style="font-style: italic; margin-bottom: 40px;">(From Data to Light)</p>
+            
+            <p>Now Your device Knows what 🫠 should look like. But it Still needs to actually draw it on your screen.</p>
+            <p>Enter the Text Rendering Pipeline , one of the most complex, least appreciated systems in computing.</p>
+            <p>Let’s Start Journey:</p>
+
+            
+            <div class="timeline">
+                
+                <div class="pipeline-step">
+                    <div class="pipeline-number">1</div>
+                    <div class="pipeline-content">
+                        <h3>Step 1: Layout Engine</h3>
+                        <p>Your messaging app sends the text (including emoji bytes) to the operating system’s layout engine. This engine <em>calculates where each character should appear. It handles word wrapping, line height, spacing between characters.</em> Emojis are treated as special characters with specific dimensions.</p>
+                    </div>
+                </div>
+
+                <figure>
+                    <img src="https://miro.medium.com/v2/resize:fit:1400/1*2qTXQ0235cD4M21EozKv-A.png" alt="Rendering Pipeline Flow">
+                    <figcaption><strong>Rendering Pipeline Flow</strong></figcaption>
+                </figure>
+
+                <div class="pipeline-step">
+                    <div class="pipeline-number">2</div>
+                    <div class="pipeline-content">
+                        <h3>Step 2: Font Engine</h3>
+                        <p>The font engine (CoreText, DirectWrite, FreeType) opens the emoji font file, locates the glyph for <code>U+1FAE0</code>, and loads its data (<strong>whether PNG, SVG, or COLR layers</strong>).</p>
+                    </div>
+                </div>
+
+                <div class="pipeline-step">
+                    <div class="pipeline-number">3</div>
+                    <div class="pipeline-content">
+                        <h3>Step 3: Rasterization</h3>
+                        <p>If the glyph is vector-based (SVG or COLR), the <strong><em>rasterizer</em></strong><em> </em>converts those mathematical shapes into actual pixels at the correct size for your screen. This is like turning a blueprint into a building.<br>Think of SVG as a OOP class and <strong><em>rasterizer </em></strong>Executes it as an Object.</p>
+                    </div>
+                </div>
+
+                <div class="pipeline-step">
+                    <div class="pipeline-number">4</div>
+                    <div class="pipeline-content">
+                        <h3>Step 4: Compositing</h3>
+                        <p>The rasterized emoji is combined with the background and other text elements. If there are gradients or transparencies, they’re calculated here using <strong><em>alpha(α) blending-</em></strong>mixing colors pixel by pixel.(<strong><em>alpha ranges[0,1]</em></strong>).</p>
+                    </div>
+                </div>
+
+                <div class="pipeline-step">
+                    <div class="pipeline-number">5</div>
+                    <div class="pipeline-content">
+                        <h3>Step 5: GPU Rendering</h3>
+                        <p>Finally, your device’s <strong>graphics processor</strong> (GPU) paints those pixels onto the screen. Millions of tiny lights (LEDs or OLEDs) illuminate in precise colors to form that melting face.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <p>All of this happens in <strong>milliseconds</strong>.</p>
+            <p>The melting face emoji 🫠 has traveled from code point to bytes to vectors to pixels to light.</p>
+
+            <div class="flowchart-container">
+                <span class="flowchart-label">The Technical FlowChart</span>
+                
+                <pre class="flowchart-pre"><code>┌───────────────┐
+│  You tap 🫠   │
+└──────┬────────┘
+       ▼
+┌────────────────────┐
+│ Unicode Mapping    │
+│      U+1FAE0       │
+└────────┬───────────┘
+       ▼
+┌────────────────────┐
+│ UTF-8 Encoding     │
+│  F0 9F AB A0       │
+└────────┬───────────┘
+       ▼
+┌────────────────────┐
+│ Data Transmission  │
+└────────┬──────────┘
+       ▼
+┌────────────────────┐
+│ OS Recognition     │
+└────────┬──────────┘
+       ▼
+┌────────────────────────────────────┐
+│ Font Selection                     │
+│ Apple / Noto / Segoe / Samsung ... │
+└────────┬──────────────────────────┘
+       ▼
+┌────────────────────┐
+│ Glyph Retrieval    │
+└────────┬──────────┘
+       ▼
+┌────────────────────┐
+│ Rendering Format   │
+│ PNG / SVG / COLR   │
+└────────┬──────────┘
+       ▼
+┌────────────────────┐
+│ Rasterization      │
+└────────┬──────────┘
+       ▼
+┌────────────────────┐
+│ Compositing        │
+└────────┬──────────┘
+       ▼
+┌────────────────────┐
+│ GPU Rendering      │
+└────────┬──────────┘
+       ▼
+┌────────────────────┐
+│ Light Emission     │
+└────────┬──────────┘
+       ▼
+┌────────────────────┐
+│ Human Perception   │
+└────────┬──────────┘
+       ▼
+┌────────────────────┐
+│ Emotional Meaning  │
+│   “Overwhelmed”🫠  │
+└────────────────────┘</code></pre>
+            </div>
+        </div>
+
+        <div class="animated fadeInUp">
+            <h2>ACT VI: Why Your Emoji Looks Different Than Mine</h2>
+            <p>You send 🫠 to a friend.</p>
+            <p>On your iPhone, it looks like a glossy yellow face with gentle melting at the bottom. On their Samsung phone, it might look flatter, with sharper edges. On their Windows laptop? Simpler still, almost like a cartoon drawing.</p>
+            <p><strong>This isn’t a bug. It’s a feature.</strong></p>
+            <p>Remember: Unicode standardizes <em>meaning</em>, not <em>appearance</em>. The Consortiums proposal for “melting face” described the emotion it should convey “overwhelmed exhaustion, embarrassment, or sarcastic humor” but left the visual interpretation to designers.</p>
+            
+            <p>This creates fascinating situations:</p>
+            <p>🔫 (pistol) was once a realistic gun on iOS. After Apple changed it to a toy water gun, other platforms followed. Same code point, radically different meaning.</p>
+            <p>This variation is intentional. Emojis are meant to be <span class="mark">culturally adaptable</span>. Just like how different languages have different words for snow, different platforms can express the same emoji differently.</p>
+
+            <div style="background: #f0f4f8; padding: 30px; border-radius: 12px; margin-top: 40px; border: 1px solid #dbe4eb;">
+                <h3 style="margin-top: 0; color: #2c3e50;">Interlude: The Unicode Consortium — Guardians of Digital Language</h3>
+                <p>Who decides which emojis exist?</p>
+                <p>The <strong>Unicode Consortium</strong> — a nonprofit organization in California that includes representatives from Google, Apple, Microsoft, Adobe, government agencies, and linguistics experts.</p>
+                <p>They meet regularly to review emoji proposals. Yes, <span class="mark">anyone can propose an emoji</span>. You need to write a detailed document explaining:</p>
+                <ul>
+                    <li>What the emoji represents</li>
+                    <li>Why it’s needed (expected usage frequency)</li>
+                    <li>How it’s distinct from existing emojis</li>
+                    <li>Visual design suggestions (though the final design is up to platforms)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="animated fadeInUp">
+            <h2>ACT VII: The Psychology of Pixel Emotion</h2>
+                        <p>Studies show that emojis activate the <strong>same brain regions</strong> as real human faces. A 😊 can trigger emotional responses similar to seeing someone genuinely smile. That’s <strong>digital emotional contagion</strong> feelings transmitted through pixels.</p>
+            
+            <blockquote>
+                Every emoji is a tiny rebellion against that idea. It says:<br>
+                <em class="gm"> </em><strong class="lw gn"><em class="gm">Yes, I’m made of code, bytes, and rendering pipelines but, I’m also art, emotion, and human connection.</em></strong>
+            </blockquote>
+
+            <p>That’s empathy, engineered.</p>
+            <p><em>Next time you send 🫠, take a moment to appreciate the journey. From your fingertip to their heart, through Unicode and bytes and pixels and light, your feeling traveled across the architecture of the internet itself.</em></p>
+            <p><em>That’s not just technology.</em></p>
+        </div>
+
+        <div class="footer">
+            <div style="background: #fff8e1; padding: 30px; border-radius: 12px; text-align: center; display: inline-block; margin-bottom: 30px; max-width: 600px;">
+                <p style="margin-bottom: 15px; color: #333;"><strong>Enjoyed the read?</strong><br> Follow me for more deep-dives on AI, tech, and innovation — where code meets creativity.</p>
+                <p style="margin: 0;">
+                    <a href="https://www.linkedin.com/in/abhilash-puli" target="_blank" style="margin: 0 10px;">LinkedIn</a> •
+                    <a href="https://abhilash.bearblog.dev/blog" target="_blank" style="margin: 0 10px;">B-Blog</a> •
+                    <a href="https://abhilashpuli98.github.io" target="_blank" style="margin: 0 10px;">git-io</a>
+                </p>
+            </div>
+            <p>
+                Content licensed under the <a href="https://github.com/abhilashpuli98/abhilashpuli98.github.io/blob/main/LICENSE" target="_blank">MIT License</a>. <br>
+                Copyright &copy; 2025 Abhilash Puli. All rights reserved.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        window.onscroll = function() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            document.getElementById("myBar").style.width = scrolled + "%";
+        };
+    </script>
+
+</body>
+</html>
