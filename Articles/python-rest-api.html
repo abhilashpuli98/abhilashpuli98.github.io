@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <title>Python and REST APIs: Interacting with Web Services Using Python and REST APIs</title>
+    <link href="css/rest-api.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+       <h1 class="post-title">Python and REST APIs: Interacting with Web Services Using Python and REST APIs</h1>
+<p class="byline">Author: <strong>Abhilash Puli</strong> | October 02, 2025</p>
+
+    <div class="social-media-icons">
+				<a href="sherlockholmes9886@gmail.com" target="_blank"><i aria-hidden="true" class="fa fa-envelope-o fa-2x animated bounceInUp"></i></a>
+        <a href="https://www.linkedin.com/in/abhilash-puli" target="_blank"><i aria-hidden="true" class="fa fa-linkedin fa-2x animated bounceInUp"></i></a>
+        <a href="https://medium.com/@abhilashpuli" target="_blank" aria-label="Medium">
+  <i class="fa fa-medium fa-2x animated bounceInUp"></i></a>
+  <a href="https://github.com/abhilashpuli98" target="_blank"><i aria-hidden="true" class="fa fa-github fa-2x animated bounceInUp"></i></a>
+				
+</div>
+
+<hr>
+</div>
+
+<hr>
+
+        <h2>Table of Contents</h2>
+
+        <blockquote>
+            <p><strong>Table of Contents</strong></p>
+        </blockquote>
+
+        <ol>
+            <li><strong>What is API,API Stands for,Working?</strong></li>
+            <li><strong>REST Architectural Constraints</strong></li>
+            <li><strong>What are the Benefits of REST APIs?</strong></li>
+            <li><strong>REST APIs and Web Services</strong></li>
+            <li><strong>HTTP Methods</strong></li>
+            <li><strong>Status Codes</strong></li>
+            <li><strong>API Endpoints</strong></li>
+        </ol>
+        <p><strong>9. REST and Python: Building APIs</strong></p>
+        <ul>
+            <li>Identify Resources</li>
+            <li>Define Endpoints</li>
+            <li>Choose Data Interchange Format</li>
+            <li>Design Success Responses</li>
+            <li>Design Error Responses</li>
+        </ul>
+        <p><strong>10. REST and Python: Tools of the Trade</strong></p>
+        <ul>
+            <li>Flask</li>
+            <li>Django REST Framework</li>
+            <li>FastAPI</li>
+        </ul>
+        <p><strong>11. Conclusion</strong></p>
+        <section class="prerequisites">
+        <p><strong>Prerequisites</strong></p>
+        <ul>
+            <li>Basic knowledge of <a href="https://docs.python.org/3/tutorial/index.html" rel="noopener ugc nofollow" target="_blank"><strong>Python</strong></a> (functions, installing packages, running scripts).</li>
+            <li>Understanding of <strong>HTTP basics</strong> (what a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods" rel="noopener ugc nofollow" target="_blank"><strong>request methods</strong></a>/response is, URLs).</li>
+            <li>Installed tools:</li>
+            <li>Python 3.x</li>
+            <li><code>pip</code> (for installing libraries like <code>requests</code>, Flask, FastAPI, etc.)</li>
+        </ul>
+        </section>
+
+        <hr>
+
+        <h2>What is an API?</h2>
+        <p><a href="https://www.youtube.com/watch?v=bxuYDT-BWaI" rel="noopener ugc nofollow" target="_blank"><strong>APIs</strong></a> are mechanisms that enable two software components to communicate with each other using a set of definitions and protocols. For example, the weather bureau’s software system contains daily weather data. The weather app on your phone “talks” to this system via APIs and shows you daily weather updates on your phone.</p>
+
+        <h2>What does API stand for?</h2>
+        <p>API stands for Application Programming Interface. In the context of APIs, the word Application refers to any software with a distinct function. Interface can be thought of as a contract of service between two applications. This contract defines how the two communicate with each other using requests and responses. Their API documentation contains information on how developers are to structure those requests and responses.</p>
+
+        <h2>Types of APIs</h2>
+        <p>APIs can be categorized in several ways, but one common approach is based on <strong>who has access</strong> to them. The main categories include:</p>
+
+        <ol>
+            <li><strong>Private APIs (Internal APIs)</strong></li>
+        </ol>
+        <ul>
+            <li>These APIs are used <strong>within a single organization</strong> to connect different software components.</li>
+            <li>They are <strong>not accessible to third-party developers</strong>.</li>
+            <li>Example: A social media platform might have separate private APIs for login, feed management, and messaging. Large applications may contain dozens or even hundreds of private APIs.</li>
+        </ul>
+        <p><strong>2. Public APIs (Open APIs)</strong></p>
+        <ul>
+            <li>These APIs are <strong>available for use by external developers</strong> and the general public.</li>
+            <li>They can be <strong>free or paid</strong>.</li>
+            <li>Example: An e-commerce platform might use the <strong>Stripe API</strong> to handle payments, allowing developers to integrate payment processing without building it from scratch.</li>
+        </ul>
+        <p><strong>3. Partner APIs</strong></p>
+        <ul>
+            <li>These APIs enable <strong>data or functionality sharing between specific business partners</strong>.</li>
+            <li>They are <strong>restricted to authorized partners</strong> and usually require authentication.</li>
+            <li>Example: A travel booking platform might allow partner airlines to update availability or pricing via a secure API.</li>
+        </ul>
+        <figure>
+            <img alt="Types of APIs" src="https://miro.medium.com/v2/resize:fit:1038/1*3pXWISgAzEDrkL5wX7d9fw.png" loading="lazy">
+            <figcaption><strong>Types of APIs</strong></figcaption>
+        </figure>
+
+        <h2>How do APIs work?</h2>
+        <p>API architecture is usually explained in terms of client and server. The application sending the request is called the client, and the application sending the response is called the server. So in the weather example, the bureau’s weather database is the server, and the mobile app is the client.</p>
+
+        <p>There are four different ways that APIs can work depending on when and why they were created.</p>
+
+        <figure>
+            <img src="https://miro.medium.com/v2/resize:fit:1170/0*ZE-UNnZE1oELmieK" loading="lazy">
+        </figure>
+
+        <p>Consider a <strong>book-distributing company</strong>. Instead of building a full-fledged cloud app for bookstore clerks to check inventory — which could be <strong>costly, platform-dependent, and time-consuming to maintain</strong> — the company could expose a <strong>REST API</strong> for stock availability.</p>
+
+        <p>The advantages of this approach are significant:</p>
+        <ol>
+            <li><strong>Centralized data access</strong>: Customers can aggregate inventory information from multiple distributors in one place.</li>
+            <li><strong>Internal flexibility</strong>: The distributor can modify internal systems without breaking customer workflows, as long as the API contract remains stable.</li>
+            <li><strong>Ecosystem growth</strong>: Third-party developers can build apps that leverage the API, enhancing customer experience and potentially driving <strong>higher sales and new business opportunities</strong>.</li>
+        </ol>
+        <p>This example highlights how APIs not only streamline operations but also <strong>create value for both the provider and its customers</strong>.</p>
+
+        <h2>SOAP APIs</h2>
+        <p>These APIs use Simple Object Access Protocol. Client and server exchange messages using XML. This is a less flexible API that was more popular in the past.</p>
+
+        <h2>RPC APIs</h2>
+        <p>These APIs are called Remote Procedure Calls. The client completes a function (or procedure) on the server, and the server sends the output back to the client.</p>
+
+        <h2>Websocket APIs</h2>
+        <p><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-overview.html" rel="noopener ugc nofollow" target="_blank">Websocket API</a> is another modern web API development that uses JSON objects to pass data. A WebSocket API supports two-way communication between client apps and the server. The server can send callback messages to connected clients, making it more efficient than REST API.</p>
+
+        <h2>REST APIs</h2>
+        <p>These are the most popular and flexible APIs found on the web today. The client sends requests to the server as data. The server uses this client input to start internal functions and returns output data back to the client. Let’s look at REST APIs in more detail below.</p>
+
+        <p>The web is overflowing with data — and much of it is up for grabs if you know how to ask. Platforms like <strong>YouTube, GitHub, and X — Formerly Twitter(</strong> expose their data to developers through <strong>APIs (Application Programming Interfaces)</strong>. Among the many ways to design APIs, the <strong>REST (Representational State Transfer) architecture style</strong> has become the go-to standard.</p>
+
+        <p>Python makes working with REST APIs especially painless. Whether you want to <strong>consume existing APIs</strong> (pulling data into your projects) or <strong>build your own REST API</strong> from scratch, Python has the right tools to make it happen.</p>
+
+        <p><strong>By the end of this tutorial, you’ll understand:</strong></p>
+        <ul>
+            <li><strong>REST architecture</strong> — its principles and why it’s the dominant style for APIs</li>
+            <li><strong>How REST APIs expose web data</strong> and why platforms like YouTube and GitHub rely on them</li>
+            <li><strong>How to consume API data with Python’s <code>requests</code> library</strong>, including basic GET and POST examples</li>
+            <li><strong>The key steps in building your own REST API</strong>, from identifying resources to handling errors</li>
+            <li><strong>Popular Python frameworks for API development</strong> — when to use Flask, Django REST Framework, or FastAPI</li>
+        </ul>
+        
+        <hr>
+
+        <blockquote>
+            <p><strong>REST (<a href="https://en.wikipedia.org/wiki/REST" rel="noopener ugc nofollow" target="_blank"><strong><em>Representational State Transfer</em></strong></a>)</strong> is a set of architectural constraints designed to create <strong>efficient, reliable, and scalable distributed systems</strong>.</p>
+        </blockquote>
+
+        <p>At its core, REST treats everything as a <strong>resource</strong> (for example, a document, image, or user record) that can be accessed and manipulated through standardized, language-agnostic <a href="https://en.wikipedia.org/wiki/Client%E2%80%93server_model" rel="noopener ugc nofollow" target="_blank"><strong><em>client–server interactions</em></strong></a>.</p>
+
+        <p>An API is considered <strong>RESTful</strong> if it follows these constraints. In practice, though, many HTTP APIs are labeled “RESTful” even if they don’t strictly comply. For beginners, you can think of a REST API simply as an <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview" rel="noopener ugc nofollow" target="_blank"><strong>HTTP</strong></a> <strong>service</strong> that can be called using standard web tools and libraries.</p>
+
+        <h3>REST API Model:</h3>
+        <figure>
+            <img src="https://miro.medium.com/v2/resize:fit:1443/1*vOdikmFLZGkP0GQnSf9GeQ.png" loading="lazy">
+            <figcaption>REST API Model</figcaption>
+        </figure>
+
+        <h3>REST architectural constraints:</h3>
+        <ul>
+            <li><strong>Stateless</strong>: Each request from the client must contain all the information needed. The server does not store any session state between requests.</li>
+            <li><strong>Client–Server</strong>: Clients and servers are independent. The client handles the user interface, while the server manages data and logic, allowing each to evolve separately.</li>
+            <li><strong>Cacheable</strong>: Responses should indicate whether they are cacheable, enabling clients (or intermediaries) to reuse data and improve performance.</li>
+            <li><strong>Uniform Interface</strong>: Resources are accessed in a consistent way, typically through URIs and standard methods (like GET, POST). This abstraction decouples clients from implementation details.</li>
+            <li><strong>Layered System</strong>: A client may not directly connect to the end server. Instead, requests can pass through intermediaries such as <a href="https://en.wikipedia.org/wiki/Proxy_server" rel="noopener ugc nofollow" target="_blank">proxies</a>, gateways, or <a href="https://en.wikipedia.org/wiki/Load_balancing_(computing)" rel="noopener ugc nofollow" target="_blank">load balancers.</a></li>
+            <li><strong>Code on Demand (optional)</strong>: Servers can extend client functionality by sending executable code (e.g., <a href="https://www.w3schools.com/js/" rel="noopener ugc nofollow" target="_blank">JavaScript</a>).</li>
+        </ul>
+
+        <blockquote>
+            <p><strong>Important:</strong> REST is not a strict specification. It’s a set of <strong>guidelines and principles</strong> for designing networked systems.</p>
+        </blockquote>
+
+        <h2>What are the benefits of REST APIs?</h2>
+        <p>REST APIs offer four main benefits:</p>
+
+        <h3>1. Integration</h3>
+        <p>APIs are used to integrate new applications with existing software systems. This increases development speed because each functionality doesn’t have to be written from scratch. You can use APIs to leverage existing code.</p>
+
+        <h3>2. Innovation</h3>
+        <p>Entire industries can change with the arrival of a new app. Businesses need to respond quickly and support the rapid deployment of innovative services. They can do this by making changes at the API level without having to re-write the whole code.</p>
+
+        <h3>3. Expansion</h3>
+        <p>APIs present a unique opportunity for businesses to meet their clients’ needs across different platforms. For example, maps API allows map information integration via websites, Android,iOS, etc. Any business can give similar access to their internal databases by using free or paid APIs.</p>
+
+        <h3>4. Ease of maintenance</h3>
+        <p>The API acts as a gateway between two systems. Each system is obliged to make internal changes so that the API is not impacted. This way, any future code changes by one party do not impact the other party.</p>
+
+        <h2>REST APIs and Web Services</h2>
+        <p>A <strong>REST web service</strong> is simply a web service that follows REST’s architectural constraints. These services make their data available to external applications through an API (Application Programming Interface).</p>
+        <p>A <strong>REST API</strong> provides access to this data via public web URLs, typically returning results in formats like <strong>JSON</strong> or <strong>XML</strong>.</p>
+        <p>For example, GitHub exposes its data through a <a href="https://docs.github.com/en/free-pro-team@latest/rest" rel="noopener ugc nofollow" target="_blank">REST API</a>. Here’s one of its endpoints:</p>
+        <pre><code>https://api.github.com/users/octocat/repos</code></pre>
+        <p>This URL gives you access to information about a specific <strong>GitHub user</strong>. To interact with a REST API, you send an <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods" rel="noopener ugc nofollow" target="_blank"><strong>HTTP request</strong></a> to a particular URL (called an <em>endpoint</em>) and then process the <strong>response</strong> the server sends back.</p>
+
+        <p>For instance, a simple <code>GET</code> request to the GitHub API endpoint:</p>
+        <pre><code>https://api.github.com/users/octocat</code></pre>
+        <ul>
+            <li>returns JSON data describing the user <code>octocat</code> — including details like their profile name, bio, and number of public repositories.</li>
+        </ul>
+
+        <h2>HTTP Methods</h2>
+        <p>REST APIs rely on <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods" rel="noopener ugc nofollow" target="_blank"><strong>HTTP methods</strong></a> (also called <em>verbs</em>) such as <code>GET</code>, <code>POST</code>, and <code>DELETE</code> to determine what kind of action to perform on a <strong>resource</strong>.</p>
+        <p>A <strong>resource</strong> is any piece of data the web service exposes — for example, a user profile, an image, or a list of products. The HTTP method specifies <strong>how</strong> the API should interact with that resource: retrieve it, create it, update it, or remove it.</p>
+        <p>Although the HTTP standard defines many methods, the following <strong>five are the most commonly used in REST APIs</strong>:</p>
+        <figure>
+            <img src="https://miro.medium.com/v2/resize:fit:516/1*bNI8qiFi0KK1HvyyIv1eng.png" loading="lazy">
+            <figcaption>HTTP standard methods</figcaption>
+        </figure>
+        <p>The following table lists HTTP request methods and their categorization in terms of safety, cacheability, and idempotency.</p>
+        <figure>
+            <img alt="HTTP response status code Table" src="https://miro.medium.com/v2/resize:fit:901/1*hmM7VC3g8mHvf_bzYRcZFw.png" loading="lazy">
+            <figcaption>HTTP request methods and their categorization</figcaption>
+        </figure>
+        <p>(<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods" rel="noopener ugc nofollow" target="_blank">Reference</a>)</p>
+
+        <h2>Status Codes</h2>
+        <p>When a REST API processes an HTTP request, it sends back an <strong>HTTP response</strong>. Every response includes a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status" rel="noopener ugc nofollow" target="_blank"><strong>status code</strong></a>, which tells you the outcome of the request.</p>
+        <p>Status codes are crucial because they let applications decide what to do next — for example, show a success message, retry the request, or handle an error gracefully.</p>
+        <p>Here are the most common status codes you’ll see when working with REST APIs:</p>
+        <figure>
+            <img alt="statusCodeCategoryTable" src="https://miro.medium.com/v2/resize:fit:821/1*fOOTIYLj6cYf8MwcT9Medg.png" loading="lazy">
+            <figcaption>common status codes (Category Based)</figcaption>
+        </figure>
+        <p>These ten status codes represent only a small subset of the available HTTP status codes. Each code belongs to a <strong>category</strong> based on the first digit:</p>
+        <figure>
+            <img alt="statusCodeCategoryTable" src="https://miro.medium.com/v2/resize:fit:821/1*fOOTIYLj6cYf8MwcT9Medg.png" loading="lazy">
+            <figcaption>common status codes (Category Based)</figcaption>
+        </figure>
+        <p>HTTP status codes come in handy when working with REST APIs as you’ll often need to perform different logic based on the results of the request.</p>
+
+        <h2>API Endpoints</h2>
+        <p>A <strong>REST API</strong> provides a set of public URLs that client applications can use to access and interact with the resources of a web service. These URLs are called <a href="https://www.ibm.com/think/topics/api-endpoint" rel="noopener ugc nofollow" target="_blank"><strong>endpoints</strong></a>. Each endpoint corresponds to a specific function or resource within the API.</p>
+        <p>For example, consider a <strong>library management system</strong>. Below is a table showing API endpoints for managing the <code>Book</code> resource hypothetical <a href="https://en.wikipedia.org/wiki/Customer_relationship_management" rel="noopener ugc nofollow" target="_blank">CRM</a> system, which represents the books available in the library:</p>
+        <figure>
+            <img src="https://miro.medium.com/v2/resize:fit:679/1*1Gdw9_yzycBDOs_e5nDZAA.png" loading="lazy">
+            <figcaption><strong><em>Common REST API endpoints for managing books in a library system</em></strong></figcaption>
+        </figure>
+        <p>Each of the endpoints above performs a different action based on the HTTP method.</p>
+        <blockquote>
+            <p><strong>Note:</strong> The <strong>base URL</strong> for the endpoints has been omitted here for brevity. In practice, you’ll need the full URL to access an API endpoint.</p>
+            <p>For example:</p>
+        </blockquote>
+        <pre><code>https://api.example.com/books</code></pre>
+        <blockquote>
+            <p>This is the full URL for the <code>books</code> resource. The <strong>base URL</strong> is everything before <code>/books</code> (in this case, <a href="https://api.example.com)." rel="noopener ugc nofollow" target="_blank"><code><em>https://api.example.com</em></code></a>).</p>
+        </blockquote>
+        <p>You’ll notice that some endpoints include <code>&lt;book_id&gt;</code> at the end. This notation means you need to append a numeric <strong>book ID</strong> to the URL to tell the REST API exactly which book you want to work with.</p>
+        <p>Also, keep in mind that the endpoints shown above represent just <strong>one resource</strong> in the system. In a real-world, production-ready REST API, there could be <strong>dozens or even hundreds of endpoints</strong>, each managing different resources and operations within the web service.</p>
+
+        <p><strong>Note:</strong> An endpoint shouldn’t contain verbs. Instead, you should select the appropriate HTTP methods to convey the endpoint’s action. For example, the endpoint below contains an unneeded verb:</p>
+        <pre><code>GET /getBooks</code></pre>
+        <p>Here, <code>get</code> is included in the endpoint when it isn’t needed. The HTTP method <code>GET</code> already provides the semantic meaning for the endpoint by indicating the action. You can remove <code>get</code> from the endpoint:</p>
+        <pre><code>GET /books</code></pre>
+        <p>This endpoint contains only a plural noun, and the HTTP method <code>GET</code> communicates the action.</p>
+
+        <h2>Example: Nested Resources</h2>
+        <p>Sometimes a resource exists <strong>within another resource</strong>, creating a hierarchy. For instance, a library system might manage <strong>chapters nested under books</strong>. Here’s how the endpoints could look:</p>
+        <figure>
+            <img alt="Nested Resources Table" src="https://miro.medium.com/v2/resize:fit:826/1*xGe-fMjOYTbxYYH-mvZFpA.png" loading="lazy">
+            <figcaption><strong>Hierarchical API design: Handling chapters under books.</strong></figcaption>
+        </figure>
+        <p>With these endpoints, you can manage <strong>chapters for a specific book</strong> in the system.</p>
+        <p>This isn’t the only way to structure nested resources. Some developers prefer using <a href="https://en.wikipedia.org/wiki/Query_string" rel="noopener ugc nofollow" target="_blank"><strong>query strings</strong></a> to access a nested resource. A query string lets you send additional parameters with your HTTP request.</p>
+        <p>For example, you could fetch chapters for a specific book using a query string like this:</p>
+        <pre><code>GET /chapters?book_id=214</code></pre>
+        <p>Here, the query string parameter <code>book_id=214</code> specifies that you want to retrieve only the chapters belonging to book 214. This approach can be useful for filtering or searching, but it’s important to balance readability and RESTful conventions when designing your API.</p>
+        <blockquote>
+            <p><strong>Note:</strong> It’s very unlikely that a REST API will remain unchanged throughout the life of a web service. Resources evolve, and endpoints may need updates to reflect these changes. This is where <strong>API versioning</strong> comes in — it allows you to modify your API <strong>without breaking existing integrations</strong>.</p>
+            <p>There are several popular strategies for versioning an API, and the right choice depends on your specific requirements:</p>
+            <p><a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design#uri-versioning" rel="noopener ugc nofollow" target="_blank"><strong>URI versioning</strong></a><strong>:</strong> Include the version number in the URL, e.g., <code><em>/v1/books</em></code>.</p>
+            <p><a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design#header-versioning" rel="noopener ugc nofollow" target="_blank"><strong>HTTP header versioning</strong></a><strong>:</strong> Specify the version in request headers.</p>
+            <p><a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design#query-string-versioning" rel="noopener ugc nofollow" target="_blank"><strong>Query string versioning</strong></a><strong>:</strong> Use query parameters like <code><em>?version=1</em></code>.</p>
+            <p><a href="https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design#media-type-versioning" rel="noopener ugc nofollow" target="_blank"><strong>Media type versioning</strong></a><strong>:</strong> Include version information in the <code><em>Content-Type</em></code> or <code><em>Accept</em></code> headers.</p>
+            <p>Regardless of the method, <strong>API versioning is essential</strong> for ensuring your API can adapt to changing requirements while continuing to support existing users.</p>
+        </blockquote>
+        <p>Now that you’ve covered endpoints, in the next section you’ll look at some options for formatting data in your REST API.</p>
+
+        <h2>Pick Your Data Interchange Format</h2>
+        <p>When designing a REST API, you need to decide <strong>how your data will be formatted</strong>. Two common options are <a href="https://en.wikipedia.org/wiki/XML" rel="noopener ugc nofollow" target="_blank"><strong>XML</strong></a> and <strong>JSON</strong>. Historically, XML was widely used with <a href="https://en.wikipedia.org/wiki/SOAP" rel="noopener ugc nofollow" target="_blank"><strong>SOAP</strong></a> APIs, but <strong>JSON has become the preferred format for REST APIs</strong> because it’s lightweight, easy to read, and integrates seamlessly with JavaScript and most programming languages.</p>
+
+        <p>To illustrate, here’s an example of a book resource formatted as <strong>XML</strong>:</p>
+        <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;book&gt;
+    &lt;title&gt;Deep Learning Essentials&lt;/title&gt;
+    &lt;page_count&gt;420&lt;/page_count&gt;
+    &lt;pub_date&gt;2022-08-10&lt;/pub_date&gt;
+    &lt;authors&gt;
+        &lt;author&gt;
+            &lt;name&gt;Aurélien Géron&lt;/name&gt;
+        &lt;/author&gt;
+        &lt;author&gt;
+            &lt;name&gt;Francois Chollet&lt;/name&gt;
+        &lt;/author&gt;
+    &lt;/authors&gt;
+    &lt;isbn13&gt;978-1617296864&lt;/isbn13&gt;
+    &lt;genre&gt;Technology&lt;/genre&gt;
+&lt;/book&gt;</code></pre>
+        <p>Here, the XML structure uses nested elements to represent hierarchical data, such as multiple authors for a book. While XML is very expressive, it tends to be <strong>more verbose</strong> than JSON, which is why many REST APIs today favor JSON.</p>
+
+        <p>Now, here’s the same book represented in <strong>JSON</strong>:</p>
+        <pre><code>{
+    "title": "Deep Learning Essentials",
+    "page_count": 420,
+    "pub_date": "2022-08-10",
+    "authors": [
+        {"name": "Aurélien Géron"},
+        {"name": "Francois Chollet"}
+    ],
+    "isbn13": "978-1617296864",
+    "genre": "Technology"
+}</code></pre>
+        <p>JSON stores data in <strong>key-value pairs</strong>, similar to a Python dictionary. Like XML, JSON supports <strong>nested structures</strong>, allowing you to model complex relationships, such as multiple authors for a single book.</p>
+        <p>While neither JSON nor XML is inherently “better,” <strong>JSON is generally preferred in REST APIs</strong>, especially when paired with front-end frameworks like <a href="https://reactjs.org/" rel="noopener ugc nofollow" target="_blank"><strong>React</strong></a>, <a href="https://reactjs.org/" rel="noopener ugc nofollow" target="_blank"><strong>Vue</strong></a>, or Angular. Its simplicity, readability, and native compatibility with JavaScript make it the go-to choice for modern web development.</p>
+
+        <h2>Design Success Responses</h2>
+        <p>Once you’ve chosen a data format, the next step is deciding <strong>how your API will respond to HTTP requests</strong>. All responses should follow a <strong>consistent structure</strong> and include the appropriate <strong>HTTP status code</strong>.</p>
+        <p>Let’s look at an example of a GET request to <code>/books</code> in a library API. We’ll examine the raw HTTP request and response rather than using a library like <code>requests</code> for clarity:</p>
+
+        <p><strong>HTTP Request:</strong></p>
+        <pre><code>GET /books HTTP/3
+Host: api.example.com</code></pre>
+
+        <p>This request has four parts:</p>
+        <ol>
+            <li><code>GET</code> – the HTTP method.</li>
+            <li><code>/books</code> – the API endpoint.</li>
+            <li><code>HTTP/1.1</code> – the HTTP version.</li>
+            <li><code>Host: api.example.com</code> – the API host.</li>
+        </ol>
+
+        <p><strong>HTTP Response:</strong></p>
+        <pre><code>HTTP/3 200 OK
+Content-Type: application/json
+[...]</code></pre>
+        <pre><code>[
+    {
+        "id": 1,
+        "title": "Deep Learning Essentials",
+        "author": "Aurélien Géron",
+        "published_year": 2022,
+        "isbn": "978-1617296864",
+        "genre": "Technology"
+    },
+    {
+        "id": 2,
+        "title": "Clean Code",
+        "author": "Robert C. Martin",
+        "published_year": 2008,
+        "isbn": "978-0132350884",
+        "genre": "Software"
+    },
+    {
+        "id": 3,
+        "title": "Artificial Intelligence: A Modern Approach",
+        "author": "Stuart Russell",
+        "published_year": 2016,
+        "isbn": "978-0134610993",
+        "genre": "Education"
+    }
+]</code></pre>
+        <p>Here’s what you can learn from this response:</p>
+        <ul>
+            <li>The <strong>200 OK</strong> status code indicates the request was successful.</li>
+            <li>The <strong>Content-Type</strong> header specifies <code>application/json</code>, telling the client to parse the response as JSON.</li>
+            <li>The response body contains a <strong>list of books</strong>, each represented as a JSON object with consistent fields.</li>
+        </ul>
+        <p>By maintaining a consistent response structure, your API becomes <strong>predictable, reliable, and easier to consume</strong> for developers.</p>
+
+        <p>Additionally, always include an <strong>appropriate HTTP status code</strong>. For a successful GET request, return <strong>200 OK</strong> — this communicates clearly that the request was processed successfully and the data is valid.</p>
+
+        <p>Take a look at another GET request, this time for a <strong>single book</strong>:</p>
+
+        <p><strong>HTTP Request:</strong></p>
+        <pre><code>GET /books/1 HTTP/3
+Host: api.example.com</code></pre>
+        <p>This request queries the API for book with ID 1.</p>
+
+        <p><strong>HTTP Response:</strong></p>
+        <pre><code>HTTP/3 200 OK
+Content-Type: application/json
+{
+    "id": 1,
+    "title": "Deep Learning Essentials",
+    "author": "Aurélien Géron",
+    "published_year": 2022,
+    "isbn": "978-1617296864",
+    "genre": "Technology"
+}</code></pre>
+        <p>Here, the response contains a <strong>single JSON object</strong> with the book’s data. Since it’s a single object, there’s no need to wrap it in a list. As before, the <strong>200 OK</strong> status code confirms that the request was successful.</p>
+        
+        <blockquote>
+            <p><strong>Note:</strong> A <code>GET</code> request should never modify an existing resource. If the request contains data, then this data should be ignored and the API should return the resource unchanged.</p>
+        </blockquote>
+
+        <p>Next, let’s look at a POST request to <strong>add a new book</strong>:</p>
+
+        <p><strong>HTTP Request:</strong></p>
+        <pre><code>POST /books HTTP/3
+Host: api.example.com
+Content-Type: application/json
+{
+    "title": "Python for Data Analysis",
+    "author": "Wes McKinney",
+    "published_year": 2018,
+    "isbn": "978-1491957660",
+    "genre": "Data Science"
+}</code></pre>
+
+        <p>This POST request includes JSON data for the new book and sets the <strong>Content-Type header</strong> to <code>application/json</code> so the API knows how to interpret the request. The API will create a new book using this data.</p>
+        
+        <p><strong>HTTP Response:</strong></p>
+        <pre><code>HTTP/3 201 Created
+Content-Type: application/json
+{
+    "id": 4,
+    "title": "Python for Data Analysis",
+    "author": "Wes McKinney",
+    "published_year": 2018,
+    "isbn": "978-1491957660",
+    "genre": "Data Science"
+}</code></pre>
+        <p>Key points from this response:</p>
+        <ul>
+            <li>The <strong>201 Created</strong> status code indicates that a new resource has been successfully created.</li>
+            <li>The response includes a <strong>copy of the new book</strong>, with an <code>id</code> generated by the API. Including the ID is important so the client can reference or update the resource later.</li>
+        </ul>
+        <blockquote>
+            <p><strong>Note:</strong> It’s important to always send back a copy of a resource when a user creates it with <code>POST</code> or modifies it with <code>PUT</code> or <code>PATCH</code>. This way, the user can see the changes that they’ve made.</p>
+        </blockquote>
+
+        <p>Now, let’s look at a PUT request to <strong>update a book</strong>:</p>
+
+        <p><strong>HTTP Request:</strong></p>
+        <pre><code>PUT /books/4 HTTP/3
+Host: api.example.com
+Content-Type: application/json
+{
+    "title": "Advanced Python Programming",
+    "author": "Joe Marini",
+    "published_year": 2021,
+    "isbn": "978-1492051376",
+    "genre": "Programming"
+}</code></pre>
+        <p>This request uses the <code>id</code> of the previously created book to <strong>replace all its fields</strong> with new data. Remember, <strong>PUT replaces the entire resource</strong>, so every field should be included in the request.</p>
+        
+        <p><strong>HTTP Response:</strong></p>
+        <pre><code>HTTP/3 200 OK
+Content-Type: application/json
+{
+    "id": 4,
+    "title": "Advanced Python Programming",
+    "author": "Joe Marini",
+    "published_year": 2021,
+    "isbn": "978-1492051376",
+    "genre": "Programming"
+}</code></pre>
+        <p>The <strong>200 OK</strong> status code confirms that the update was successful, and the response body returns the updated book.</p>
+
+        <p>The same concept applies to a <strong>PATCH request</strong>, which is used to <strong>update only part of a resource</strong>:</p>
+
+        <p><strong>HTTP Request:</strong></p>
+        <pre><code>PATCH /books/4 HTTP/3
+Host: api.example.com
+Content-Type: application/json
+{
+    "published_year": 2022,
+    "genre": "Software Development"
+}</code></pre>
+        <p>This request updates only the <code>published_year</code> and <code>genre</code> fields of the book with ID 4, leaving all other fields unchanged.</p>
+
+        <p><strong>HTTP Response:</strong></p>
+        <pre><code>HTTP/3 200 OK
+Content-Type: application/json
+{
+    "id": 4,
+    "title": "Advanced Python Programming",
+    "author": "Joe Marini",
+    "published_year": 2022,
+    "isbn": "978-1492051376",
+    "genre": "Software Development"
+}</code></pre>
+        <p>The response returns a <strong>full copy of the book</strong>, but only the fields included in the PATCH request (<code>published_year</code> and <code>genre</code>) have been updated.</p>
+        
+        <p>Finally, let’s see how a REST API should respond to a <strong>DELETE request</strong>. Here’s an example to remove a book:</p>
+
+        <p><strong>HTTP Request:</strong></p>
+        <pre><code>DELETE /books/4 HTTP/3
+Host: api.example.com</code></pre>
+        <p>This request instructs the API to delete the book with ID 4.</p>
+
+        <p><strong>HTTP Response:</strong></p>
+        <pre><code>HTTP/3 204 No Content</code></pre>
+        <p>The response includes only the <strong>204 No Content</strong> status code, which indicates that the operation was successful but <strong>no content is returned</strong>. This makes sense because the book has been deleted — there’s no need to send it back.</p>
+
+        <h2>Design Error Responses</h2>
+        <p>Even the best-designed APIs can encounter errors. It’s important to define a <strong>consistent error response format</strong> that includes both a descriptive message and the appropriate <strong>HTTP status code</strong>.</p>
+        <p>For example, consider a request for a resource that doesn’t exist in the API:</p>
+        <p><strong>HTTP Request:</strong></p>
+        <pre><code>GET /magazines HTTP/3
+Host: api.example.com</code></pre>
+        <p>Here, the client requests the <code>/magazines</code> endpoint, which doesn’t exist.</p>
+        <p><strong>HTTP Response:</strong></p>
+        <pre><code>HTTP/3 404 Not Found
+Content-Type: application/json
+{
+    "error": "The requested resource was not found."
+}</code></pre>
+        <ul>
+            <li>The <strong>404 Not Found</strong> status code indicates that the resource does not exist.</li>
+            <li>The response body contains a <strong>descriptive error message</strong> in JSON format. Providing clear error messages gives developers <strong>more context</strong> and helps them debug or correct their requests.</li>
+        </ul>
+
+        <p>Next, consider an error response when a client sends an <strong>invalid request</strong>:</p>
+        <p><strong>HTTP Request:</strong></p>
+        <pre><code>POST /books HTTP/3
+Host: api.example.com
+Content-Type: application/xml
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;book&gt;
+    &lt;title&gt;Python Crash Course&lt;/title&gt;
+    &lt;author&gt;Eric Matthes&lt;/author&gt;
+    &lt;published_year&gt;2019&lt;/published_year&gt;
+    &lt;genre&gt;Programming&lt;/genre&gt;
+&lt;/book&gt;</code></pre>
+        <p><strong>HTTP Response:</strong></p>
+        <pre><code>HTTP/3 415 Unsupported Media Type
+Content-Type: application/json
+{
+    "error": "The application/xml media type is not supported."
+}</code></pre>
+        <ul>
+            <li><strong>415 Unsupported Media Type</strong> indicates that the request included a data format the API cannot process.</li>
+        </ul>
+
+        <p><strong>Invalid Data in Correct Format:</strong><br>Even if the JSON is valid, the API might reject unexpected or unsupported fields:</p>
+        <p><strong>HTTP Request:</strong></p>
+        <pre><code>POST /books HTTP/3
+Host: api.example.com
+Content-Type: application/json
+{
+    "title": "Python Crash Course",
+    "author": "Eric Matthes",
+    "pages": 550,
+    "extraField": "Invalid data"
+}</code></pre>
+        <p><strong>HTTP Response:</strong></p>
+        <pre><code>HTTP/3 422 Unprocessable Entity
+Content-Type: application/json
+{
+    "error": "Request had invalid or missing data."
+}</code></pre>
+        <ul>
+            <li>The <strong>422 Unprocessable Entity</strong> status code indicates that the request was syntactically correct, but the <strong>data itself was invalid</strong>. A well-designed REST API should always <strong>validate incoming data</strong> and clearly inform users of any errors.</li>
+        </ul>
+        <p>Responding to requests — both successful and erroneous — is one of the most important jobs of a REST API. An <strong>intuitive API with accurate responses</strong> makes it much easier for developers to build applications around your web service. Fortunately, several <strong>Python web frameworks</strong> handle much of the complexity of processing HTTP requests and returning structured responses. In the next section, we’ll explore <strong>three popular frameworks</strong> that simplify building REST APIs.</p>
+
+        <hr>
+
+        <h2>REST and Python: Tools of the Trade</h2>
+        <p>In this section, we’ll explore three popular <strong>Python frameworks</strong> for building REST APIs. Each framework has its strengths and trade-offs, so you’ll need to decide which one best suits your project. To demonstrate, we’ll build a similar API in each framework that manages a <strong>collection of books</strong>.</p>
+        <p>Each book will have the following fields:</p>
+        <ul>
+            <li><strong>title</strong> — the name of the book.</li>
+            <li><strong>author</strong> — the author of the book.</li>
+            <li><strong>pages</strong> — the number of pages in the book.</li>
+        </ul>
+        <p>These fields store essential information about each book.</p>
+        <p>Most of the time, REST APIs fetch data from a <strong>database</strong>, but connecting to a database is beyond the scope of this tutorial. For our examples, we’ll store the data in a <strong>Python list</strong>, except for the Django REST framework example, which uses Django’s built-in <strong>SQLite database</strong>.</p>
+        <p>This approach keeps the examples <strong>simple and focused</strong>, letting you learn the framework mechanics before adding database complexity.</p>
+        <blockquote>
+            <p><strong>Note:</strong> It’s a good practice to create <strong>separate folders</strong> for each framework example to keep the source files organized. Additionally, you should use <strong>Python virtual environments</strong> for each project to isolate dependencies and avoid conflicts between frameworks.</p>
+        </blockquote>
+        <p>To keep things consistent, we’ll use <strong>books</strong> as the main endpoint for all three frameworks. We’ll also use <strong>JSON</strong> as the data format across the examples.</p>
+        <p>Now that the background is set, let’s dive into <strong>building a REST API in Flask</strong>.</p>
+
+        <h2>Flask</h2>
+        <p><a href="http://geeksforgeeks.org/python/flask-tutorial/" rel="noopener ugc nofollow" target="_blank"><strong>Flask</strong></a> is a lightweight Python microframework for building web applications and REST APIs. It provides a solid foundation while giving you the flexibility to structure your application the way you want. At its core, Flask <strong>handles HTTP requests</strong> and <strong>routes them</strong> to the appropriate function in your application.</p>
+        <p>For our example, the API will manage a collection of books, each with the fields:</p>
+        <ul>
+            <li><code>title</code></li>
+            <li><code>author</code></li>
+            <li><code>pages</code></li>
+        </ul>
+        <p>We’ll store these books in a Python list for simplicity, allowing us to focus on <strong>Flask mechanics</strong> without worrying about databases.</p>
+        
+        <p>For example, instead of using:</p>
+        <pre><code>@app.get("/books")
+@app.post("/books")</code></pre>
+        <p>in <strong>Flask 1.x</strong>, you should use:</p>
+        <pre><code>@app.route("/books")
+@app.route("/books", methods=["POST"])</code></pre>
+        <p>This handles GET and POST requests to the <code>/books</code> endpoint in older Flask versions.</p>
+
+        <h2>Example Flask Application: Books API</h2>
+        <pre><code># <em>app.py</em>
+from <strong>flask</strong> import <strong>Flask</strong>, request, <strong>jsonify</strong>
+
+app = Flask(__name__)
+
+books = [
+    {"id": 1, "title": "Python Crash Course", "author": "Eric Matthes", "pages": 550},
+    {"id": 2, "title": "Automate the Boring Stuff", "author": "Al Sweigart", "pages": 600},
+    {"id": 3, "title": "Fluent Python", "author": "Luciano Ramalho", "pages": 790},
+]
+
+def <strong>_find_next_id()</strong>:
+    return <strong>max</strong>(book["id"] for book in books) + 1
+
+@app.get("/books")
+def <strong>get_books()</strong>:
+    return <strong>jsonify</strong>(books)
+
+@app.post("/books")
+def <strong>add_book()</strong>:
+    if <strong>request.is_json</strong>:
+        book = <strong>request.get_json()</strong>
+        book["id"] = <strong>_find_next_id()</strong>
+        books.<strong>append</strong>(book)
+        return book, <strong>201</strong>
+    return {"error": "Request must be JSON"}, <strong>415</strong></code></pre>
+        
+        <h2>How It Works</h2>
+        <ul>
+            <li><strong>GET /books</strong>: Returns the full list of books.</li>
+            <li><strong>POST /books</strong>: Adds a new book to the list. The API expects <strong>JSON data</strong>, assigns a new <code>id</code> automatically, and returns a <strong>201 Created</strong> response. If the request is not JSON, it returns a <strong>415 Unsupported Media Type</strong> error.</li>
+        </ul>
+        <blockquote>
+            <p><strong>Note:</strong> This Flask application includes functions to handle only two types of requests to the API endpoint, <code>/countries</code>. In a full REST API, you’d want to expand this to include functions for all the required operations.</p>
+        </blockquote>
+        
+        <p>You can try out this application by first installing Flask with pip:</p>
+        <pre><code>$ <strong>python</strong> -m <strong>pip</strong> <strong>install</strong> flask</code></pre>
+        
+        <p>Once installed, save the code in a file called <code>app.py</code>. To run the Flask application, you need to set an <strong>environment variable</strong> called <code>FLASK_APP</code> pointing to <code>app.py</code>. This tells Flask which file contains your application.</p>
+        
+        <p>On <strong>macOS or Linux</strong>, run:</p>
+        <pre><code>$ <strong>export</strong> FLASK_APP=app.py</code></pre>
+        
+        <p>Optionally, you can enable <strong>debug mode</strong> to get helpful error messages and automatic reloads whenever you change your code:</p>
+        <pre><code>$ <strong>export</strong> FLASK_ENV=development</code></pre>
+        
+        <blockquote>
+            <p><strong>Note:</strong> The above commands work on macOS or Linux. If you’re running this on Windows, then you need to set <code><em>FLASK_APP</em></code> and <code><em>FLASK_ENV</em></code> like this in the Command Prompt:</p>
+        </blockquote>
+        <pre><code>C:\&gt;<strong>set</strong> FLASK_APP=app.py
+C:\&gt;<strong>set</strong> FLASK_ENV=development</code></pre>
+        <p>Now <code>FLASK_APP</code> and <code>FLASK_ENV</code> are set inside the Windows shell.</p>
+
+        <p>With all environment variables set, you can start the Flask development server by running:</p>
+        <pre><code>$ <strong>flask run</strong></code></pre>
+        <p>You’ll see output like this:</p>
+        <pre><code>* Serving Flask app "app.py" (lazy loading)
+* Environment: development
+* Debug mode: on
+* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</code></pre>
+        <p>This launches a server running your application. Open your browser and navigate to <a href="http://127.0.0.1:5000/books" rel="noopener ugc nofollow" target="_blank">http://127.0.0.1:5000/books</a>, and you’ll see the following JSON response:</p>
+        <pre><code>[
+    {"id": 1, "title": "Python Crash Course", "author": "Eric Matthes", "pages": 550},
+    {"id": 2, "title": "Automate the Boring Stuff", "author": "Al Sweigart", "pages": 600},
+    {"id": 3, "title": "Fluent Python", "author": "Luciano Ramalho", "pages": 790}
+]</code></pre>
+        <p>This response contains the three books defined at the start of <code>app.py</code>.</p>
+        <p>Here’s how it works in the code:</p>
+        <pre><code>@app.get("/books")
+def <strong>get_books()</strong>:
+    return <strong>jsonify</strong>(books)</code></pre>
+        <p>The <code>@app.get()</code> decorator <strong>connects GET requests</strong> to the <code>get_books()</code> function. When you access <code>/books</code>, Flask calls this function to handle the request and return a JSON response with all the book data.</p>
+        <p>In the code above, <code>get_books()</code> takes <code>books</code>, which is a Python list, and converts it to JSON using <code>jsonify()</code>. This JSON is then returned in the HTTP response.</p>
+        
+        <p>The helper function <code>_find_next_id()</code> determines the ID for the new book:</p>
+        <pre><code>def <strong>_find_next_id()</strong>:
+    return <strong>max</strong>(book["id"] for book in books) + 1</code></pre>
+        <p>This function uses a generator expression to select all existing book IDs and then finds the largest value. Adding 1 gives the next available ID.</p>
+        <p>You can test this endpoint using <strong>curl</strong> from the command line to simulate a POST request:</p>
+        <pre><code>$ <strong>curl -i</strong> http://127.0.0.1:5000/books \
+-X <strong>POST</strong> \
+-H <strong>'Content-Type: application/json'</strong> \
+-d '{"title":"Clean Code", "author":"Robert C. Martin", "pages":364}'</code></pre>
+        <p>The response will look like this:</p>
+        <pre><code>HTTP/3 <strong>201 CREATED</strong>
+Content-Type: application/json
+...
+{"id": 4, "title":"Clean Code", "author":"Robert C. Martin", "pages":364}</code></pre>
+        <p><strong>Curl options to note:</strong></p>
+        <ul>
+            <li><code>-X</code> specifies the HTTP method.</li>
+            <li><code>-H</code> sets an HTTP header.</li>
+            <li><code>-d</code> provides the request data.</li>
+        </ul>
+        <p>With these options, <code>curl</code> sends JSON data in a POST request, and the API returns <strong>201 Created</strong> along with the JSON for the new book.</p>
+
+        <h2>Django REST Framework</h2>
+        <p>Another popular choice for building REST APIs in Python is <a href="https://www.django-rest-framework.org/" rel="noopener ugc nofollow" target="_blank"><strong>Django REST framework (DRF)</strong></a>. DRF is a plugin for Django that adds powerful REST API functionality on top of an existing Django project.</p>
+        <p>To use Django REST framework, you first need a Django project. If you already have one, you can integrate DRF directly. Otherwise, follow along to create a new project and add DRF.</p>
+        <p>Start by installing Django and Django REST framework:</p>
+        <pre><code>$ <strong>python -m pip install</strong> Django djangorestframework</code></pre>
+        <p>Once installed, create a new Django project:</p>
+        <pre><code>$ <strong>django-admin startproject</strong> bookapi</code></pre>
+        <p>This creates a <code>bookapi</code> folder in your current directory containing all the necessary files for the project. Next, create a new Django <strong>application</strong> to handle your books API. In Django, each app manages a distinct part of the project:</p>
+        <pre><code>$ <strong>cd</strong> bookapi
+$ <strong>python manage.py startapp</strong> books</code></pre>
+        <p>This creates a <code>books</code> folder inside your project. Inside it, you’ll find the base files for the application.</p>
+        <p>Finally, tell Django about your new app. Open <code>bookapi/settings.py</code> and add <code>"books"</code> and <code>"rest_framework"</code> to <code>INSTALLED_APPS</code>:</p>
+        <pre><code>INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    <strong>"rest_framework"</strong>,
+    <strong>"books"</strong>,
+]</code></pre>
+        <p>The next step is to create a <strong>Django model</strong> to define the fields of your data. Inside the <code>books</code> application, update <code>models.py</code>:</p>
+        <pre><code># <em>books/models.py</em>
+from <strong>django.db</strong> import <strong>models</strong>
+
+class <strong>Book(models.Model)</strong>:
+    title = models.CharField(<strong>max_length=200</strong>)
+    author = models.CharField(<strong>max_length=100</strong>)
+    page_count = models.IntegerField(<strong>help_text="Number of pages"</strong>)
+    published_date = models.DateField()</code></pre>
+        <p>This defines a <code>Book</code> model. Django will use this to create the database table and columns for your book data.</p>
+        <p>Run the following commands to update the database:</p>
+        <pre><code>$ <strong>python manage.py makemigrations</strong>
+Migrations for 'books':
+  books/migrations/0001_initial.py
+    - Create model Book</code></pre>
+        <pre><code>$ <strong>python manage.py migrate</strong>
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, books, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+Applying books.0001_initial... OK</code></pre>
+        <p>These commands create a new database table for books.</p>
+        <p>The table starts empty, but it’s useful to have some initial data for testing DRF. You can use a <strong>Django fixture</strong> to load sample books. Save the following JSON as <code>books.json</code> inside the <code>books</code> directory:</p>
+        <pre><code>[
+    {
+        "model": "books.book",
+        "pk": 1,
+        "fields": {
+            "title": "Python Basics",
+            "author": "David Amos",
+            "page_count": 635,
+            "published_date": "2021-03-16"
+        }
+    },
+    {
+        "model": "books.book",
+        "pk": 2,
+        "fields": {
+            "title": "Data Science Fundamentals",
+            "author": "Joanna Jablonski",
+            "page_count": 512,
+            "published_date": "2020-07-10"
+        }
+    },
+    {
+        "model": "books.book",
+        "pk": 3,
+        "fields": {
+            "title": "Machine Learning 101",
+            "author": "Dan Bader",
+            "page_count": 400,
+            "published_date": "2022-01-05"
+        }
+    }
+]</code></pre>
+        <p>This fixture gives you some initial book records for testing your API. You can later load it with:</p>
+        <pre><code>$ <strong>python manage.py loaddata</strong> books.json</code></pre>
+        <p>This JSON contains database entries for three books. Call the following command to load this data into the database:</p>
+        <pre><code>$ <strong>python manage.py loaddata</strong> books.json
+Installed 3 object(s) from 1 fixture(s)</code></pre>
+        <p>This adds three rows to the database.</p>
+        <p>With that, your Django application is now set up and populated with initial data. You can start integrating Django REST framework.</p>
+        <p>Django REST framework converts Django models into JSON for your REST API using <strong>serializers</strong>. A serializer defines how to transform a model instance into JSON and which fields to include.</p>
+        <p>Create a file called <code>serializers.py</code> inside the <code>books</code> application. Add the following code:</p>
+        <pre><code># <em>books/serializers.py</em>
+from <strong>rest_framework</strong> import <strong>serializers</strong>
+from .models import <strong>Book</strong>
+
+class <strong>BookSerializer(serializers.ModelSerializer)</strong>:
+    class <strong>Meta</strong>:
+        model = <strong>Book</strong>
+        fields = [<strong>"id"</strong>, <strong>"title"</strong>, <strong>"author"</strong>, <strong>"page_count"</strong>, <strong>"published_date"</strong>]</code></pre>
+        <p>This <code>BookSerializer</code> subclasses <code>serializers.ModelSerializer</code> to automatically generate JSON from the <code>Book</code> model fields. By specifying the <code>fields</code> list, you control exactly which fields are exposed via the API.</p>
+        <p>Just like Django, Django <strong>REST framework</strong> uses <strong>views</strong> to query the database and display data via the API. Instead of manually writing each REST API view, you can subclass <code>ModelViewSet</code>, which comes with built-in views for common REST API operations.</p>
+        
+        <p>Here’s a table of <code>ModelViewSet</code> actions with their equivalent HTTP methods for a <code>books</code> API:</p>
+        <figure>
+            <img alt="HTTP-Method-Action Table" src="https://miro.medium.com/v2/resize:fit:679/1*m-TqDU5ntFn-4ZkSvXRhBQ.png" loading="lazy">
+            <figcaption>REST API Actions Provided by Django REST Framework’s <code>ModelViewSet</code> for the <code>Book</code> Resource</figcaption>
+        </figure>
+        <p>As you can see, these actions map to the standard HTTP methods you’d expect in a REST API. You can <a href="https://www.django-rest-framework.org/api-guide/viewsets/#example" rel="noopener ugc nofollow" target="_blank">override these actions</a> in your subclass or <a href="https://www.django-rest-framework.org/api-guide/viewsets/#marking-extra-actions-for-routing" rel="noopener ugc nofollow" target="_blank">add additional actions</a> based on the requirements of your API.</p>
+        <p>Below is the code for a <strong>ModelViewSet</strong> subclass called <code>BookViewSet</code>. This class will generate the views needed to manage <strong>Book</strong> data. Add the following code to <code>views.py</code> inside the <code>books</code> application:</p>
+        <pre><code># <em>books/views.py</em>
+from <strong>rest_framework</strong> import <strong>viewsets</strong>
+from .models import <strong>Book</strong>
+from .serializers import <strong>BookSerializer</strong>
+
+class <strong>BookViewSet(viewsets.ModelViewSet)</strong>:
+    <strong>serializer_class</strong> = <strong>BookSerializer</strong>
+    <strong>queryset</strong> = <strong>Book.objects.all()</strong></code></pre>
+        <p>In this class, <code>serializer_class</code> is set to <code>BookSerializer</code> and <code>queryset</code> is set to <code>Book.objects.all()</code>. This tells Django REST framework which serializer to use and how to query the database for this specific set of views.</p>
+        <p>Once the views are created, they need to be mapped to the appropriate URLs or endpoints. To do this, Django REST framework provides a <strong>DefaultRouter</strong> that will automatically generate URLs for a ModelViewSet.</p>
+        <p>Create a <code>urls.py</code> file in the <code>books</code> application and add the following code to the file:</p>
+        <pre><code># <em>books/urls.py</em>
+from <strong>django.urls</strong> import path, <strong>include</strong>
+from <strong>rest_framework.routers</strong> import <strong>DefaultRouter</strong>
+from .views import <strong>BookViewSet</strong>
+
+<strong>router = DefaultRouter()</strong>
+<strong>router.register(r "books", BookViewSet)</strong>
+urlpatterns = [
+    <strong>path("", include(router.urls))</strong>
+]</code></pre>
+        <p>This code creates a <a href="https://www.django-rest-framework.org/api-guide/routers/#defaultrouter" rel="noopener ugc nofollow" target="_blank"><strong>DefaultRouter</strong></a> and registers <code>BookViewSet</code> under the <code>books</code> URL. This will place all the URLs for <code>BookViewSet</code> under <code>/books/</code>.</p>
+        
+        <p>Finally, you need to update the project’s base <code>urls.py</code> file to include all the <strong>books</strong> URLs in the project. Update the <code>urls.py</code> file inside your project folder (e.g., <code>bookapi/urls.py</code>) with the following code:</p>
+        <pre><code># <em>bookapi/urls.py</em>
+from <strong>django.contrib</strong> import <strong>admin</strong>
+from <strong>django.urls</strong> import <strong>path</strong>, <strong>include</strong>
+
+urlpatterns = [
+    <strong>path("admin/", admin.site.urls)</strong>,
+    <strong>path("", include("books.urls"))</strong>,
+]</code></pre>
+        <p>This puts all the URLs under <code>/books/</code>. Now you’re ready to try out your Django-backed REST API. Run the following command in the root <code>bookapi</code> directory to start the Django development server:</p>
+        <pre><code>$ <strong>python manage.py runserver</strong></code></pre>
+        <p>The development server is now running. Go ahead and send a GET request to <code>/books/</code> to get a list of all the books in your Django project:</p>
+        <pre><code>$ <strong>curl -i</strong> http://127.0.0.1:8000/books/ -w <strong>'\n'</strong></code></pre>
+        <p>Example response:</p>
+        <pre><code>HTTP/3 <strong>200 OK</strong>
+...
+[
+    {
+        "id": 1,
+        "title": "The Pragmatic Programmer",
+        "author": "Andrew Hunt",
+        "pages": 352
+    },
+    {
+        "id": 2,
+        "title": "Clean Code",
+        "author": "Robert C. Martin",
+        "pages": 464
+    },
+    {
+        "id": 3,
+        "title": "Effective Python",
+        "author": "Brett Slatkin",
+        "pages": 256
+    }
+]</code></pre>
+        <p>Django REST framework sends back a JSON response with the three books you added earlier. The response above is formatted for readability, so your response may look slightly different.</p>
+        <p>The <code>DefaultRouter</code> you created in <code>books/urls.py</code> provides URLs for requests to all the standard API endpoints:</p>
+        <ul>
+            <li><code>GET /books/</code> → list all books</li>
+            <li><code>GET /books/&lt;id&gt;/</code> → retrieve a single book</li>
+            <li><code>POST /books/</code> → create a new book</li>
+            <li><code>PUT /books/&lt;id&gt;/</code> → update all fields of a book</li>
+            <li><code>PATCH /books/&lt;id&gt;/</code> → update some fields of a book</li>
+            <li><code>DELETE /books/&lt;id&gt;/</code> → remove a book</li>
+        </ul>
+        <p>You can try out a POST request to <code>/books/</code> to create a new book in your Django project:</p>
+        <pre><code>$ <strong>curl -i</strong> http://127.0.0.1:8000/books/ \
+-X <strong>POST</strong> \
+-H <strong>'Content-Type: application/json'</strong> \
+-d '{"title":"Python Crash Course", "author":"Eric Matthes", "pages":544}' \
+-w <strong>'\n'</strong></code></pre>
+        <p>Example response:</p>
+        <pre><code>HTTP/3 <strong>201 Created</strong>
+content-type: application/json
+...
+{"id":4,"title":"Python Crash Course","author":"Eric Matthes","pages":544}</code></pre>
+        <p>This creates a new <strong>Book</strong> with the JSON you sent in the request. Django REST framework returns a <code>201 Created</code> status code along with the newly created book.</p>
+
+        <h2>FastAPI</h2>
+        <p><a href="https://www.geeksforgeeks.org/python/fastapi-introduction/" rel="noopener ugc nofollow" target="_blank"><strong><em>FastAPI</em></strong></a> is a Python web framework optimized for building APIs. It uses Python type hints and has built-in support for async operations. FastAPI is built on top of <a href="https://www.starlette.io/" rel="noopener ugc nofollow" target="_blank"><strong>Starlette</strong></a> and <a href="https://pydantic-docs.helpmanual.io/" rel="noopener ugc nofollow" target="_blank"><strong>Pydantic</strong></a> and is very performant.</p>
+        <p>Below is an example of a REST API for books built with FastAPI:</p>
+        <pre><code># <em>app.py</em>
+from <strong>fastapi</strong> import <strong>FastAPI</strong>
+from <strong>pydantic</strong> import <strong>BaseModel</strong>, <strong>Field</strong>
+
+<strong>app = FastAPI()</strong>
+
+def <strong>_find_next_id()</strong>:
+    return max(book.book_id for book in books) + 1
+
+class <strong>Book(BaseModel)</strong>:
+    book_id: int = <strong>Field</strong>(default_factory=<strong>_find_next_id</strong>, alias="id")
+    title: str
+    author: str
+    pages: int
+
+books = [
+    Book(id=1, title="The Pragmatic Programmer", author="Andrew Hunt", pages=352),
+    Book(id=2, title="Clean Code", author="Robert C. Martin", pages=464),
+    Book(id=3, title="Deep Learning", author="Ian Goodfellow", pages=775),
+]
+
+@app.get("/books")
+async def <strong>get_books()</strong>:
+    return books
+
+@app.post("/books", status_code=201)
+async def <strong>add_book(book: Book)</strong>:
+    books.<strong>append</strong>(book)
+    return book</code></pre>
+        <p>This application uses FastAPI features to build a REST API for <strong>books</strong>, similar to how we handled countries in previous examples.</p>
+        <p>You can try this application by installing FastAPI with pip:</p>
+        <pre><code>$ <strong>python -m pip install</strong> fastapi</code></pre>
+        <p>You’ll also need to install <code>uvicorn[standard]</code>, a server that can run FastAPI applications:</p>
+        <pre><code>$ <strong>python -m pip install</strong> uvicorn[standard]</code></pre>
+        <p>Once both FastAPI and Uvicorn are installed, save the code above in a file called <code>app.py</code>. Run the following command to start a development server:</p>
+        <pre><code>$ <strong>uvicorn app:app --reload</strong>
+INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)</code></pre>
+        <p>The server is now running. Open up a browser and go to <a href="http://127.0.0.1:8000/books" rel="noopener ugc nofollow" target="_blank">http://127.0.0.1:8000/books</a>. You’ll see FastAPI respond with this:</p>
+        <pre><code>[
+    {
+        "id": 1,
+        "title":"The Pragmatic Programmer",
+        "author":"Andrew Hunt",
+        "pages":352
+    },
+    {
+        "id": 2,
+        "title":"Clean Code",
+        "author":"Robert C. Martin",
+        "pages":464
+    },
+    {
+        "id": 3,
+        "title":"Deep Learning",
+        "author":"Ian Goodfellow",
+        "pages":775
+    }
+]</code></pre>
+        <p>FastAPI responds with a JSON array containing a list of books. You can also add a new book by sending a POST request to <code>/books</code>:</p>
+        <pre><code>$ <strong>curl -i</strong> http://127.0.0.1:8000/books \
+-X <strong>POST</strong> \
+-H <strong>'Content-Type: application/json'</strong> \
+-d '{"title":"Python Crash Course", "author":"Eric Matthes", "pages":544}' \
+-w <strong>'\n'</strong></code></pre>
+        <pre><code>HTTP/3 <strong>201 Created</strong>
+content-type: application/json
+...
+{"id":4,"title":"Python Crash Course","author":"Eric Matthes","pages":544}</code></pre>
+        <p>You added a new book. You can confirm this with GET <code>/books</code>:</p>
+        <pre><code>$ <strong>curl -i</strong> http://127.0.0.1:8000/books -w <strong>'\n'</strong></code></pre>
+        <pre><code>HTTP/3 <strong>200 OK</strong>
+content-type: application/json
+...
+[
+    {
+        "id":1,
+        "title":"The Pragmatic Programmer",
+        "author":"Andrew Hunt",
+        "pages":352
+    },
+    {
+        "id":2,
+        "title":"Clean Code",
+        "author":"Robert C. Martin",
+        "pages":464
+    },
+    {
+        "id":3,
+        "title":"Deep Learning",
+        "author":"Ian Goodfellow",
+        "pages":775
+    },
+    {
+        "id":4,
+        "title":"Python Crash Course",
+        "author":"Eric Matthes",
+        "pages":544
+    }
+]</code></pre>
+        <p>FastAPI returns a JSON list including the new book you just added.</p>
+        <p>FastAPI’s <strong>high performance</strong>, <strong>async support</strong>, and <strong>automatic documentation generation</strong> make it an excellent choice for modern REST APIs.</p>
+
+        <h2>Conclusion</h2>
+        <p>Building REST APIs in Python has never been more approachable. Whether you choose <strong>Flask</strong> for its simplicity, <strong>Django REST Framework</strong> for full-featured projects, or <strong>FastAPI</strong> for high-performance, modern applications, the core principles remain the same: <strong>design intuitive endpoints, validate incoming data, and respond consistently with clear status codes</strong>.</p>
+        <p>Throughout this article, we explored <strong>CRUD operations, error handling, data validation, and JSON serialization</strong>, highlighting best practices and practical examples. We also saw how frameworks like <strong>Pydantic and serializers</strong> simplify data validation and ensure your API is robust and maintainable.</p>
+        <p>By adhering to these standards and leveraging Python’s rich ecosystem, you can build APIs that are <strong>scalable, reliable, and developer-friendly</strong>, making it easier for clients and applications to interact with your services efficiently.</p>
+        <p>Ultimately, mastering REST API development is about <strong>clarity, consistency, and thoughtful design</strong> — tools and frameworks are just enablers. With the foundations laid here, you’re ready to build APIs that are not only functional but also elegant and professional.</p>
+    </div>
+    
+    <p class="copyright">
+        Content licensed under the <a href="../LICENSE" target="_blank">MIT License</a>. <br>
+        Copyright &copy; 2025 Abhilash Puli. All rights reserved.
+    </p>
+
+
+</body>
+</html>
